@@ -1,0 +1,928 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="3Pj5X-zEP5sL9AZ8p83jcdfnEvcnB3g7kTjptY2evO8" />
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="HTTPS,Let's Encrypt,NAS,群晖," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5" />
+
+
+
+
+
+
+<meta name="description" content="去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。 不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s">
+<meta name="keywords" content="HTTPS,Let&#39;s Encrypt,NAS,群晖">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群晖 Let&#39;s Encrypt 证书的自动更新">
+<meta property="og:url" content="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/index.html">
+<meta property="og:site_name" content="UP4DEV">
+<meta property="og:description" content="去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。 不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s">
+<meta property="og:updated_time" content="2017-09-12T05:48:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="群晖 Let&#39;s Encrypt 证书的自动更新">
+<meta name="twitter:description" content="去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。 不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/"/>
+
+
+  <title> 群晖 Let's Encrypt 证书的自动更新 | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-60523957-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=59121199";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">UP4DEV</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Try, then you know.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                群晖 Let's Encrypt 证书的自动更新
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-09-11T18:00:00+08:00" content="2017-09-11">
+              2017-09-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/09/11/synology-ssl-cert-update/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/09/11/synology-ssl-cert-update/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。</p>
+<p>不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s Encrypt的证书，以及怎么自动更新证书。</p>
+<a id="more"></a>
+<p>如果说你幸福的生活在一个运营商没有封80端口的国度，那么这篇文章你就不必往下看了，因为群晖的证书管理本身就内置了Let’s Encrypt的证书管理方式。我之所以写这篇文章，是因为我家的网络是没有开放80端口的，所以群晖自带的管理工具永远都是告诉你<code>“无法连接到 Let&#39;s Encrypt。请确认域名有效。”</code></p>
+<p>好在Let’s Encrypt提供了acme协议的认证方式，可以在没有80端口的情形下来签发和更新证书。</p>
+<p>感谢伟大的GitHub以及无私的开发者们，所有的工具基本上都已经被开发了出来。</p>
+<p><a href="https://github.com/Neilpang/acme.sh" target="_blank" rel="external"><strong>Neilpang/acme.sh</strong></a> 这个项目基本上就是我们用到的所有的工具了。</p>
+<p>如果你是一个动手能力强的人，那么我在告诉你一下群晖的证书的保存位置<code>/usr/syno/etc/certificate/</code>的话，余下的工作你就应该可以自己搞定了。</p>
+<p>下面就开始介绍具体的步骤：</p>
+<h2 id="1-下载并安装acme-sh"><a href="#1-下载并安装acme-sh" class="headerlink" title="1. 下载并安装acme.sh"></a>1. 下载并安装acme.sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 登入NAS</span></div><div class="line">ssh -p your_port your_name@your_host</div><div class="line"><span class="comment"># 下载并安装acme.sh工具</span></div><div class="line">curl  https://get.acme.sh | sh</div></pre></td></tr></table></figure>
+<h2 id="2-修改配置文件，填入你在指定域名提供商的授权token"><a href="#2-修改配置文件，填入你在指定域名提供商的授权token" class="headerlink" title="2. 修改配置文件，填入你在指定域名提供商的授权token"></a>2. 修改配置文件，填入你在指定域名提供商的授权token</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 进入到配置文件所在目录</span></div><div class="line"><span class="built_in">cd</span> ~/.acme.sh/dnsapi</div><div class="line"><span class="comment"># 打开阿里云的配置文件，其他提供商可以自行修改对应的配置文件</span></div><div class="line">vi dns_ali.sh</div><div class="line"><span class="comment"># 修改如下两行配置为你自己的token，注意要去掉前面的#号</span></div><div class="line"><span class="comment"># #Ali_Key="LTqIA87hOKdjevsf5"</span></div><div class="line"><span class="comment"># #Ali_Secret="0p5EYueFNq501xnCPzKNbx6K51qPH2"</span></div><div class="line"><span class="comment"># 保存并退出vi</span></div></pre></td></tr></table></figure>
+<p>不同的提供商的token的形式和配置方式可能会有不同，需要你到域名管理的后台自己去获取。</p>
+<h2 id="3-准备用于存放安装后的证书的目录"><a href="#3-准备用于存放安装后的证书的目录" class="headerlink" title="3. 准备用于存放安装后的证书的目录"></a>3. 准备用于存放安装后的证书的目录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 新建一个存放所有证书的根目录</span></div><div class="line">mkdir cert_save_path</div><div class="line"><span class="built_in">cd</span> cert_save_path</div><div class="line"><span class="comment"># 为每个子域名创建对应的</span></div><div class="line">mkdir sub1.example.com</div><div class="line">mkdir sub2.example.com</div><div class="line"><span class="comment"># ...</span></div></pre></td></tr></table></figure>
+<h2 id="4-生成证书"><a href="#4-生成证书" class="headerlink" title="4. 生成证书"></a>4. 生成证书</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 首先加载acme.sh的环境变量</span></div><div class="line"><span class="built_in">source</span> ~/.acme.sh/acme.sh.env</div><div class="line"><span class="comment"># 执行证书获取命令，我这里的dns_ali是对应阿里云的，其他供应商可以查阅acme的文档</span></div><div class="line">acme.sh --issue --dns dns_ali <span class="_">-d</span> sub1.example.com</div><div class="line">acme.sh --issue --dns dns_ali <span class="_">-d</span> sub2.example.com</div></pre></td></tr></table></figure>
+<h2 id="5-安装证书"><a href="#5-安装证书" class="headerlink" title="5. 安装证书"></a>5. 安装证书</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">acme.sh --installcert <span class="_">-d</span> sub1.example.com \</div><div class="line">        --certpath /cert_save_path/sub1.example.com/cert.pem \</div><div class="line">        --key-file /cert_save_path/sub1.example.com/privkey.pem \</div><div class="line">        --fullchain-file /cert_save_path/sub1.example.com/fullchain.pem</div><div class="line">acme.sh --installcert <span class="_">-d</span> sub2.example.com \</div><div class="line">        --certpath /cert_save_path/sub2.example.com/cert.pem \</div><div class="line">        --key-file /cert_save_path/sub2.example.com/privkey.pem \</div><div class="line">        --fullchain-file /cert_save_path/sub2.example.com/fullchain.pem</div></pre></td></tr></table></figure>
+<p>其实这里的安装是指的acme将获取的证书安装到之前建立好的目录，并没有安装到NAS自己的证书管理下边。</p>
+<h2 id="6-NAS证书安装"><a href="#6-NAS证书安装" class="headerlink" title="6. NAS证书安装"></a>6. NAS证书安装</h2><p>控制面板 -&gt; 安全性 -&gt; 证书 -&gt; 新增 -&gt; 添加新证书 -&gt; 导入证书(描述那里填完整的子域名) -&gt; 导入证书文件(私钥为privkey 证书为cert.pem 中间证书为fullchain.pem)</p>
+<p>这一步将我们从Let’s Encrypt获取的证书安装到了NAS，我们发现有效期是三个月，如果你能够接受三个月走一遍上边的流程，那么到这里就可以结束了，如果想把这个过程自动化起来，请接着看下边的流程。</p>
+<h2 id="7-证书更新命令"><a href="#7-证书更新命令" class="headerlink" title="7. 证书更新命令"></a>7. 证书更新命令</h2><p>因为Let’s Encrypt的证书的有效期只有三个月，所有我们必须至少每三个月执行一次更性操作，以防止证书过期。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">acme.sh/acme.sh --renew --force --dns dns_ali <span class="_">-d</span> sub1.example.com</div><div class="line">acme.sh/acme.sh --installcert <span class="_">-d</span> sub1.example.com \</div><div class="line">        --certpath /cert_save_path/sub1.example.com/cert.pem \</div><div class="line">        --key-file /cert_save_path/sub1.example.com/privkey.pem \</div><div class="line">        --fullchain-file /cert_save_path/sub1.example.com/fullchain.pem</div><div class="line">acme.sh/acme.sh --renew --force --dns dns_ali <span class="_">-d</span> sub2.example.com</div><div class="line">acme.sh/acme.sh --installcert <span class="_">-d</span> sub2.example.com \</div><div class="line">        --certpath /cert_save_path/sub2.example.com/cert.pem \</div><div class="line">        --key-file /cert_save_path/sub2.example.com/privkey.pem \</div><div class="line">        --fullchain-file /cert_save_path/sub2.example.com/fullchain.pem</div></pre></td></tr></table></figure>
+<p>执行上边的命令，会从Let’s Encrypt更新证书，并安装到指定的位置。</p>
+<h2 id="8-拷贝证书脚本"><a href="#8-拷贝证书脚本" class="headerlink" title="8. 拷贝证书脚本"></a>8. 拷贝证书脚本</h2><p>这一步我认为一定是有其他方法来做的，但是因为搞不明白群晖NAS的证书存放逻辑，暂时就想了这么一个折中的办法。</p>
+<p>通过观察可以发现，所有证书相关的配置都是在路径<code>/usr/syno/etc/certificate</code>下的，证书存放的具体位置是<code>/usr/syno/etc/certificate/_archive</code>，该目录下的内容形如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">2zFLdC  DEFAULT  dXWIy3  h94Uuq  IhSb6T  INFO  kGn0Zn  uTv2EL  vY1OEs  WE3xYE</div></pre></td></tr></table></figure>
+<p>其中INFO的内容是一个JSON文件，记录了每个证书的存放位置和应用的范围，DEFAULT记录了哪一个是默认的证书，其他的目录则是存放一个一个的子域名的证书。</p>
+<p>通过观察INFO的内容我们可以发现目录名和域名的对应关系，我编写了一个python脚本来分析这个对应关系以及将前文的证书拷贝到对应的位置，脚本名称为update.py.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># update.py</span></div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> shutil</div><div class="line"></div><div class="line">SRC_BASE_PATH = <span class="string">'/cert_save_path'</span>   <span class="comment"># 这是步骤3里创建的目录</span></div><div class="line">DES_BASE_PATH = <span class="string">'/usr/syno/etc/certificate'</span></div><div class="line">ARC_BASE_PATH = <span class="string">'/usr/syno/etc/certificate/_archive'</span></div><div class="line"></div><div class="line"><span class="comment"># [archive_key: (domain_name, destination_path)]</span></div><div class="line">keys = &#123;&#125;</div><div class="line"></div><div class="line">cfg_str = open(<span class="string">'/usr/syno/etc/certificate/_archive/INFO'</span>).read()</div><div class="line">cfg = json.loads(cfg_str)</div><div class="line"></div><div class="line"><span class="comment"># name to key</span></div><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> cfg:</div><div class="line">    <span class="keyword">for</span> service <span class="keyword">in</span> cfg[k][<span class="string">'services'</span>]:</div><div class="line">        name = service[<span class="string">'display_name'</span>]</div><div class="line">        <span class="keyword">if</span> name.find(<span class="string">'up4dev.com'</span>) &lt; <span class="number">0</span>:</div><div class="line">            <span class="keyword">continue</span></div><div class="line">        keys[k] = &#123;<span class="string">'name'</span> : name, <span class="string">'arc_path'</span> : <span class="string">'%s/%s'</span> %(ARC_BASE_PATH, k), <span class="string">'des_path'</span> : [], <span class="string">'src_path'</span>: <span class="string">'%s/%s'</span> %(SRC_BASE_PATH, name)&#125;</div><div class="line">        <span class="comment"># des_path = '%s/%s/%s' %(CERT_BASE_PATH, service['subscriber'], service['service'])</span></div><div class="line">        <span class="comment"># print name, des_path</span></div><div class="line"></div><div class="line"><span class="keyword">for</span> k <span class="keyword">in</span> cfg:</div><div class="line">    <span class="keyword">for</span> service <span class="keyword">in</span> cfg[k][<span class="string">'services'</span>]:</div><div class="line">        des_path = <span class="string">'%s/%s/%s'</span> %(DES_BASE_PATH, service[<span class="string">'subscriber'</span>], service[<span class="string">'service'</span>])</div><div class="line">        <span class="keyword">if</span> os.path.exists(des_path):</div><div class="line">            keys[k][<span class="string">'des_path'</span>].append(des_path)</div><div class="line"></div><div class="line"><span class="keyword">for</span> key <span class="keyword">in</span> keys:</div><div class="line">    <span class="keyword">print</span> keys[key]</div><div class="line">    shutil.copy2(keys[key][<span class="string">'src_path'</span>] + <span class="string">'/cert.pem'</span>, keys[key][<span class="string">'arc_path'</span>] + <span class="string">'/cert.pem'</span>)</div><div class="line">    shutil.copy2(keys[key][<span class="string">'src_path'</span>] + <span class="string">'/privkey.pem'</span>, keys[key][<span class="string">'arc_path'</span>] + <span class="string">'/privkey.pem'</span>)</div><div class="line">    shutil.copy2(keys[key][<span class="string">'src_path'</span>] + <span class="string">'/fullchain.pem'</span>, keys[key][<span class="string">'arc_path'</span>] + <span class="string">'/fullchain.pem'</span>)</div><div class="line">    <span class="keyword">for</span> des <span class="keyword">in</span> keys[key][<span class="string">'des_path'</span>]:</div><div class="line">        shutil.copy2(keys[key][<span class="string">'arc_path'</span>] + <span class="string">'/cert.pem'</span>, des + <span class="string">'/cert.pem'</span>)</div><div class="line">        shutil.copy2(keys[key][<span class="string">'arc_path'</span>] + <span class="string">'/privkey.pem'</span>, des + <span class="string">'/privkey.pem'</span>)</div><div class="line">        shutil.copy2(keys[key][<span class="string">'arc_path'</span>] + <span class="string">'/fullchain.pem'</span>, des + <span class="string">'/fullchain.pem'</span>)</div></pre></td></tr></table></figure>
+<h2 id="9-重启web服务"><a href="#9-重启web服务" class="headerlink" title="9. 重启web服务"></a>9. 重启web服务</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 我选用的是nginx作为Web服务，如果选择Apache则执行Apache的重启命令</span></div><div class="line">/usr/syno/etc/rc.sysv/nginx.sh reload</div></pre></td></tr></table></figure>
+<h2 id="10-自动化脚本"><a href="#10-自动化脚本" class="headerlink" title="10. 自动化脚本"></a>10. 自动化脚本</h2><p>我们将8，9，10三个步骤的操作串起来，做成一个自动化脚本，保存为auto_update.sh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 更新并安装</span></div><div class="line">acme.sh/acme.sh --renew --force --dns dns_ali <span class="_">-d</span> sub1.example.com</div><div class="line">acme.sh/acme.sh --installcert <span class="_">-d</span> sub1.example.com \</div><div class="line">        --certpath /cert_save_path/sub1.example.com/cert.pem \</div><div class="line">        --key-file /cert_save_path/sub1.example.com/privkey.pem \</div><div class="line">        --fullchain-file /cert_save_path/sub1.example.com/fullchain.pem</div><div class="line">acme.sh/acme.sh --renew --force --dns dns_ali <span class="_">-d</span> sub2.example.com</div><div class="line">acme.sh/acme.sh --installcert <span class="_">-d</span> sub2.example.com \</div><div class="line">        --certpath /cert_save_path/sub2.example.com/cert.pem \</div><div class="line">        --key-file /cert_save_path/sub2.example.com/privkey.pem \</div><div class="line">        --fullchain-file /cert_save_path/sub2.example.com/fullchain.pem</div><div class="line"></div><div class="line"><span class="comment"># 拷贝到NAS的证书路径</span></div><div class="line">python update.py</div><div class="line"></div><div class="line"><span class="comment"># 重启Web服务</span></div><div class="line"></div><div class="line">/usr/syno/etc/rc.sysv/nginx.sh reload</div></pre></td></tr></table></figure>
+<h2 id="11-设置定时任务"><a href="#11-设置定时任务" class="headerlink" title="11. 设置定时任务"></a>11. 设置定时任务</h2><p>控制面板 -&gt; 任务计划 -&gt; 新增 -&gt; 计划的任务 -&gt; 用户定义的脚本 -&gt; 计划(设置成每月执行一次) -&gt; 任务设置(用户定义的脚本中填入步骤10的脚本的完整路径)</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://forum.51nb.com/thread-1789843-1-1.html" target="_blank" rel="external">forum.51nb.com: 群晖安装并自动续期Let’s Encrypt SSL证书</a></li>
+<li><a href="https://github.com/Neilpang/acme.sh/wiki/%E8%AF%B4%E6%98%8E" target="_blank" rel="external">Neilpang/acme.sh 说明</a></li>
+</ul>
+<p></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HTTPS/" rel="tag">#HTTPS</a>
+          
+            <a href="/tags/Let-s-Encrypt/" rel="tag">#Let's Encrypt</a>
+          
+            <a href="/tags/NAS/" rel="tag">#NAS</a>
+          
+            <a href="/tags/群晖/" rel="tag">#群晖</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/12/git-commit-info-specify/" rel="next" title="git commit 时指定时间和作者等信息">
+                <i class="fa fa-chevron-left"></i> git commit 时指定时间和作者等信息
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://up4dev.oss-cn-qingdao.aliyuncs.com/up.jpg"
+               alt="andyzhshg" />
+          <p class="site-author-name" itemprop="name">andyzhshg</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/andyzhshg" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/andyzhshg" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-下载并安装acme-sh"><span class="nav-number">1.</span> <span class="nav-text">1. 下载并安装acme.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-修改配置文件，填入你在指定域名提供商的授权token"><span class="nav-number">2.</span> <span class="nav-text">2. 修改配置文件，填入你在指定域名提供商的授权token</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-准备用于存放安装后的证书的目录"><span class="nav-number">3.</span> <span class="nav-text">3. 准备用于存放安装后的证书的目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-生成证书"><span class="nav-number">4.</span> <span class="nav-text">4. 生成证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-安装证书"><span class="nav-number">5.</span> <span class="nav-text">5. 安装证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-NAS证书安装"><span class="nav-number">6.</span> <span class="nav-text">6. NAS证书安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-证书更新命令"><span class="nav-number">7.</span> <span class="nav-text">7. 证书更新命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-拷贝证书脚本"><span class="nav-number">8.</span> <span class="nav-text">8. 拷贝证书脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-重启web服务"><span class="nav-number">9.</span> <span class="nav-text">9. 重启web服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-自动化脚本"><span class="nav-number">10.</span> <span class="nav-text">10. 自动化脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-设置定时任务"><span class="nav-number">11.</span> <span class="nav-text">11. 设置定时任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">12.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">andyzhshg</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'up4dev';
+      var disqus_identifier = '2017/09/11/synology-ssl-cert-update/';
+      var disqus_title = "群晖 Let\'s Encrypt 证书的自动更新";
+      var disqus_url = 'http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = false;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title >= 0 || index_content >= 0 ){
+                                isMatch = true;
+								if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            } 
+							
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+
+</body>
+</html>

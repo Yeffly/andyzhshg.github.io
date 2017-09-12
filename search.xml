@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[群晖 Let's Encrypt 证书的自动更新]]></title>
+    <url>%2F2017%2F09%2F11%2Fsynology-ssl-cert-update%2F</url>
+    <content type="text"><![CDATA[去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。 不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s Encrypt的证书，以及怎么自动更新证书。 如果说你幸福的生活在一个运营商没有封80端口的国度，那么这篇文章你就不必往下看了，因为群晖的证书管理本身就内置了Let’s Encrypt的证书管理方式。我之所以写这篇文章，是因为我家的网络是没有开放80端口的，所以群晖自带的管理工具永远都是告诉你“无法连接到 Let&#39;s Encrypt。请确认域名有效。” 好在Let’s Encrypt提供了acme协议的认证方式，可以在没有80端口的情形下来签发和更新证书。 感谢伟大的GitHub以及无私的开发者们，所有的工具基本上都已经被开发了出来。 Neilpang/acme.sh 这个项目基本上就是我们用到的所有的工具了。 如果你是一个动手能力强的人，那么我在告诉你一下群晖的证书的保存位置/usr/syno/etc/certificate/的话，余下的工作你就应该可以自己搞定了。 下面就开始介绍具体的步骤： 1. 下载并安装acme.sh1234# 登入NASssh -p your_port your_name@your_host# 下载并安装acme.sh工具curl https://get.acme.sh | sh 2. 修改配置文件，填入你在指定域名提供商的授权token12345678# 进入到配置文件所在目录cd ~/.acme.sh/dnsapi# 打开阿里云的配置文件，其他提供商可以自行修改对应的配置文件vi dns_ali.sh# 修改如下两行配置为你自己的token，注意要去掉前面的#号# #Ali_Key="LTqIA87hOKdjevsf5"# #Ali_Secret="0p5EYueFNq501xnCPzKNbx6K51qPH2"# 保存并退出vi 不同的提供商的token的形式和配置方式可能会有不同，需要你到域名管理的后台自己去获取。 3. 准备用于存放安装后的证书的目录1234567# 新建一个存放所有证书的根目录mkdir cert_save_pathcd cert_save_path# 为每个子域名创建对应的mkdir sub1.example.commkdir sub2.example.com# ... 4. 生成证书12345# 首先加载acme.sh的环境变量source ~/.acme.sh/acme.sh.env# 执行证书获取命令，我这里的dns_ali是对应阿里云的，其他供应商可以查阅acme的文档acme.sh --issue --dns dns_ali -d sub1.example.comacme.sh --issue --dns dns_ali -d sub2.example.com 5. 安装证书12345678acme.sh --installcert -d sub1.example.com \ --certpath /cert_save_path/sub1.example.com/cert.pem \ --key-file /cert_save_path/sub1.example.com/privkey.pem \ --fullchain-file /cert_save_path/sub1.example.com/fullchain.pemacme.sh --installcert -d sub2.example.com \ --certpath /cert_save_path/sub2.example.com/cert.pem \ --key-file /cert_save_path/sub2.example.com/privkey.pem \ --fullchain-file /cert_save_path/sub2.example.com/fullchain.pem 其实这里的安装是指的acme将获取的证书安装到之前建立好的目录，并没有安装到NAS自己的证书管理下边。 6. NAS证书安装控制面板 -&gt; 安全性 -&gt; 证书 -&gt; 新增 -&gt; 添加新证书 -&gt; 导入证书(描述那里填完整的子域名) -&gt; 导入证书文件(私钥为privkey 证书为cert.pem 中间证书为fullchain.pem) 这一步将我们从Let’s Encrypt获取的证书安装到了NAS，我们发现有效期是三个月，如果你能够接受三个月走一遍上边的流程，那么到这里就可以结束了，如果想把这个过程自动化起来，请接着看下边的流程。 7. 证书更新命令因为Let’s Encrypt的证书的有效期只有三个月，所有我们必须至少每三个月执行一次更性操作，以防止证书过期。 12345678910acme.sh/acme.sh --renew --force --dns dns_ali -d sub1.example.comacme.sh/acme.sh --installcert -d sub1.example.com \ --certpath /cert_save_path/sub1.example.com/cert.pem \ --key-file /cert_save_path/sub1.example.com/privkey.pem \ --fullchain-file /cert_save_path/sub1.example.com/fullchain.pemacme.sh/acme.sh --renew --force --dns dns_ali -d sub2.example.comacme.sh/acme.sh --installcert -d sub2.example.com \ --certpath /cert_save_path/sub2.example.com/cert.pem \ --key-file /cert_save_path/sub2.example.com/privkey.pem \ --fullchain-file /cert_save_path/sub2.example.com/fullchain.pem 执行上边的命令，会从Let’s Encrypt更新证书，并安装到指定的位置。 8. 拷贝证书脚本这一步我认为一定是有其他方法来做的，但是因为搞不明白群晖NAS的证书存放逻辑，暂时就想了这么一个折中的办法。 通过观察可以发现，所有证书相关的配置都是在路径/usr/syno/etc/certificate下的，证书存放的具体位置是/usr/syno/etc/certificate/_archive，该目录下的内容形如： 12zFLdC DEFAULT dXWIy3 h94Uuq IhSb6T INFO kGn0Zn uTv2EL vY1OEs WE3xYE 其中INFO的内容是一个JSON文件，记录了每个证书的存放位置和应用的范围，DEFAULT记录了哪一个是默认的证书，其他的目录则是存放一个一个的子域名的证书。 通过观察INFO的内容我们可以发现目录名和域名的对应关系，我编写了一个python脚本来分析这个对应关系以及将前文的证书拷贝到对应的位置，脚本名称为update.py. 12345678910111213141516171819202122232425262728293031323334353637383940# update.pyimport jsonimport osimport shutilSRC_BASE_PATH = '/cert_save_path' # 这是步骤3里创建的目录DES_BASE_PATH = '/usr/syno/etc/certificate'ARC_BASE_PATH = '/usr/syno/etc/certificate/_archive'# [archive_key: (domain_name, destination_path)]keys = &#123;&#125;cfg_str = open('/usr/syno/etc/certificate/_archive/INFO').read()cfg = json.loads(cfg_str)# name to keyfor k in cfg: for service in cfg[k]['services']: name = service['display_name'] if name.find('up4dev.com') &lt; 0: continue keys[k] = &#123;'name' : name, 'arc_path' : '%s/%s' %(ARC_BASE_PATH, k), 'des_path' : [], 'src_path': '%s/%s' %(SRC_BASE_PATH, name)&#125; # des_path = '%s/%s/%s' %(CERT_BASE_PATH, service['subscriber'], service['service']) # print name, des_pathfor k in cfg: for service in cfg[k]['services']: des_path = '%s/%s/%s' %(DES_BASE_PATH, service['subscriber'], service['service']) if os.path.exists(des_path): keys[k]['des_path'].append(des_path)for key in keys: print keys[key] shutil.copy2(keys[key]['src_path'] + '/cert.pem', keys[key]['arc_path'] + '/cert.pem') shutil.copy2(keys[key]['src_path'] + '/privkey.pem', keys[key]['arc_path'] + '/privkey.pem') shutil.copy2(keys[key]['src_path'] + '/fullchain.pem', keys[key]['arc_path'] + '/fullchain.pem') for des in keys[key]['des_path']: shutil.copy2(keys[key]['arc_path'] + '/cert.pem', des + '/cert.pem') shutil.copy2(keys[key]['arc_path'] + '/privkey.pem', des + '/privkey.pem') shutil.copy2(keys[key]['arc_path'] + '/fullchain.pem', des + '/fullchain.pem') 9. 重启web服务12# 我选用的是nginx作为Web服务，如果选择Apache则执行Apache的重启命令/usr/syno/etc/rc.sysv/nginx.sh reload 10. 自动化脚本我们将8，9，10三个步骤的操作串起来，做成一个自动化脚本，保存为auto_update.sh 123456789101112131415161718# 更新并安装acme.sh/acme.sh --renew --force --dns dns_ali -d sub1.example.comacme.sh/acme.sh --installcert -d sub1.example.com \ --certpath /cert_save_path/sub1.example.com/cert.pem \ --key-file /cert_save_path/sub1.example.com/privkey.pem \ --fullchain-file /cert_save_path/sub1.example.com/fullchain.pemacme.sh/acme.sh --renew --force --dns dns_ali -d sub2.example.comacme.sh/acme.sh --installcert -d sub2.example.com \ --certpath /cert_save_path/sub2.example.com/cert.pem \ --key-file /cert_save_path/sub2.example.com/privkey.pem \ --fullchain-file /cert_save_path/sub2.example.com/fullchain.pem# 拷贝到NAS的证书路径python update.py# 重启Web服务/usr/syno/etc/rc.sysv/nginx.sh reload 11. 设置定时任务控制面板 -&gt; 任务计划 -&gt; 新增 -&gt; 计划的任务 -&gt; 用户定义的脚本 -&gt; 计划(设置成每月执行一次) -&gt; 任务设置(用户定义的脚本中填入步骤10的脚本的完整路径) 参考 forum.51nb.com: 群晖安装并自动续期Let’s Encrypt SSL证书 Neilpang/acme.sh 说明 ]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>HTTPS</tag>
+        <tag>Let&#39;s Encrypt</tag>
+        <tag>NAS</tag>
+        <tag>群晖</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git commit 时指定时间和作者等信息]]></title>
+    <url>%2F2017%2F06%2F12%2Fgit-commit-info-specify%2F</url>
+    <content type="text"><![CDATA[最近遇到了这么一个问题，需要在提交代码的时候指定提交的时间和作者等信息，而不是当前用户和当前时间提交（不要问我为什么，就是有这么个需求）。 经过一通的搜索查找资料，终于找到一个还算是比较方便的办法。 12345GIT_AUTHOR_DATE=&quot;2017-06-01 12:33:08&quot; \ GIT_COMMITTER_DATE=&quot;2017-06-01 12:33:08&quot; \ git commit . \ --author=&quot;author name &lt;author@email.com&gt;&quot; \ -m&quot;some commit message&quot; 是不是很简单。]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[比特币源码分析写作计划]]></title>
+    <url>%2F2017%2F01%2F09%2Fbitcoin-code-review-plan%2F</url>
+    <content type="text"><![CDATA[2017年说来就来，回顾去年一年似乎也没有干多少正经的事情。 因为现在的工作和兴趣都在区块链这边，这新的一年的重心应该都会在区块链上，所以就有了这个计划。目的主要是敦促自己坚持完成一件事情，另外也对学习的过程有一定的记录。如果万一能够给来这里的读者一定的帮助，也算是意外的收获了。 计划中的主题会有如下的部分： 代码的版本，编译，基础组织结构 交易 区块链 挖矿 网络 写作的过程中，这些主题会有一定的调整，但是比特币相关细节的各个部分都应该会涵盖在内。 这个计划挂在这里，主要是要督促自己不要懈怠，具体执行的结果，随后拭目以待吧。]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>区块链</tag>
+        <tag>比特币</tag>
+        <tag>BitCoin</tag>
+        <tag>技术</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++11的智能指针(2) shared_ptr]]></title>
+    <url>%2F2016%2F10%2F19%2Fcpp11-shared_ptr%2F</url>
+    <content type="text"><![CDATA[C++11新引入了几种智能指针：unique_ptr，shared_ptr和weak_ptr，而原来的auto_ptr被弃用。 我会写几篇文章分别来介绍这几种智能指针的用法，本篇主要介绍shared_ptr。 shared_ptr可以说是我们最常规意义上理解的智能指针了，区别于unique_ptr，share_ptr有拷贝构造函数和赋值操作符，每当shared_ptr多出一个拷贝，所有拷贝的引用计数都会增加。 shared_ptr的常规用法12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152// example1.cpp#include &lt;iostream&gt;#include &lt;memory&gt;class Test &#123;public: Test(int tag) : _tag(tag) &#123; std::cout &lt;&lt; "Test::Test() " &lt;&lt; _tag &lt;&lt; std::endl; &#125; ~Test() &#123; std::cout &lt;&lt; "Test::~Test() " &lt;&lt; _tag &lt;&lt; std::endl; &#125; void test() &#123; std::cout &lt;&lt; "Test::test() " &lt;&lt; _tag &lt;&lt; std::endl; &#125;private: int _tag;&#125;;int main() &#123; std::shared_ptr&lt;Test&gt; p1(new Test(1)); p1-&gt;test(); std::cout &lt;&lt; "p1:" &lt;&lt; p1.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; std::shared_ptr&lt;Test&gt; p2 = std::make_shared&lt;Test&gt;(2); p2-&gt;test(); std::cout &lt;&lt; "p2:" &lt;&lt; p2.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; std::shared_ptr&lt;Test&gt; p3 = p1; p3-&gt;test(); std::cout &lt;&lt; "p1:" &lt;&lt; p1.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "p3:" &lt;&lt; p3.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; p1.reset(); std::cout &lt;&lt; "p1:" &lt;&lt; p1.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "p3:" &lt;&lt; p3.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; p2 = p3; p2-&gt;test(); std::cout &lt;&lt; "p2:" &lt;&lt; p2.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "p3:" &lt;&lt; p3.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; return 0;&#125; 编译 1g++ -o example1 -std=c++11 example1.cpp 运行结果 123456789101112131415161718192021Test::Test() 1 Test::test() 1p1:1 (1)----------------Test::Test() 2Test::test() 2p2:1 (2)----------------Test::test() 1p1:2p3:2 (3)----------------p1:0p3:1 (4)----------------Test::~Test() 2Test::test() 1p2:2p3:2 (5)----------------Test::~Test() 1 (6) (1) 展示了用shared_ptr的构造函数来生成一个shared_ptr对象，并且我们看到他的引用计数现在是1。 (2) 展示了用make_shared来生成一个shared_ptr，可以看到，这里我们终于彻底告别了new，是不是感觉有点暗爽。 (3) 展示了shared_ptr的赋值操作，我们看到，赋值之后，p1和p3的引用计数都增加到了2。 (4) reset操作使得p1变为空的，所以它的引用计数为0，而p3的引用计数则减少到了1，此时的p1和p3已经完全不是一回事了。 (5) p2 = p3的操作使得p2原来指向的对象被释放，所以我们首先看到一条析构函数的输出。然后我们看到p2 p3的的引用计数都变成了2。 (6) 程序退出的时候，很自然的，所有的智能指针都出了作用域，所以最后一条析构调用被输出。 类型转换假设我们两个类1234567891011121314151617181920212223242526272829303132333435363738394041#include &lt;iostream&gt;#include &lt;memory&gt;class Base &#123;public: Base() &#123; std::cout &lt;&lt; "Base::Base()" &lt;&lt; std::endl; &#125; ~Base() &#123; std::cout &lt;&lt; "Base::~Base()" &lt;&lt; std::endl; &#125; virtual void test() &#123; std::cout &lt;&lt; "Base::test()" &lt;&lt; std::endl; &#125;&#125;;class Derived : public Base &#123;public: Derived() &#123; std::cout &lt;&lt; "Derived::Derived()" &lt;&lt; std::endl; &#125; ~Derived() &#123; std::cout &lt;&lt; "Derived::~Derived()" &lt;&lt; std::endl; &#125; virtual void test() &#123; std::cout &lt;&lt; "Derived::test()" &lt;&lt; std::endl; &#125;&#125;;int main() &#123; std::shared_ptr&lt;Base&gt; pb = std::make_shared&lt;Base&gt;(); std::shared_ptr&lt;Derived&gt; pd = std::make_shared&lt;Derived&gt;(); std::cout &lt;&lt; "pb.use_count() " &lt;&lt; pb.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "pd.use_count() " &lt;&lt; pd.use_count() &lt;&lt; std::endl; pb = static_cast&lt;Base&gt;(pd); std::cout &lt;&lt; "pb.use_count() " &lt;&lt; pb.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "pd.use_count() " &lt;&lt; pd.use_count() &lt;&lt; std::endl; pb-&gt;test(); return 0;&#125; 用static_cast, dynamic_cast, const_cast是无法用在不同的shared_ptr之上的。 自己实现一个shared_ptr12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061//shared_ptr.hnamespace up4dev &#123; template&lt;typename T&gt; class shared_ptr &#123; public: shared_ptr() : _p(nullptr), _c(nullptr)&#123; &#125; ~shared_ptr() &#123; reset(); &#125; shared_ptr(T* p) : _p(p), _c(new int(1)) &#123; &#125; shared_ptr(const shared_ptr&amp; sp) &#123; reset(); _p = sp._p; _c = sp._c; *_c += 1; &#125; shared_ptr&amp; operator=(const shared_ptr&amp; sp) &#123; reset(); _p = sp._p; _c = sp._c; *_c += 1; return *this; &#125; T* get() &#123; return _p; &#125; T* operator-&gt;() &#123; return _p; &#125; void reset() &#123; if (_c) &#123; *_c -= 1; if (*_c == 0) &#123; delete _p; delete _c; &#125; _p = nullptr; _c = nullptr; &#125; &#125; int use_count() &#123; return _c ? *_c : 0; &#125; private: T* _p; int* _c; &#125;;&#125; 对前文的测试用例稍加修改，用新写的shared_ptr来替换标准库的实现 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152//example3.cpp#include &lt;iostream&gt;#include "shared_ptr.h"class Test &#123;public: Test(int tag) : _tag(tag) &#123; std::cout &lt;&lt; "Test::Test() " &lt;&lt; _tag &lt;&lt; std::endl; &#125; ~Test() &#123; std::cout &lt;&lt; "Test::~Test() " &lt;&lt; _tag &lt;&lt; std::endl; &#125; void test() &#123; std::cout &lt;&lt; "Test::test() " &lt;&lt; _tag &lt;&lt; std::endl; &#125;private: int _tag;&#125;;int main() &#123; up4dev::shared_ptr&lt;Test&gt; p1(new Test(1)); p1-&gt;test(); std::cout &lt;&lt; "p1:" &lt;&lt; p1.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; up4dev::shared_ptr&lt;Test&gt; p2 = up4dev::shared_ptr&lt;Test&gt;(new Test(2)); p2-&gt;test(); std::cout &lt;&lt; "p2:" &lt;&lt; p2.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; up4dev::shared_ptr&lt;Test&gt; p3 = p1; p3-&gt;test(); std::cout &lt;&lt; "p1:" &lt;&lt; p1.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "p3:" &lt;&lt; p3.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; p1.reset(); std::cout &lt;&lt; "p1:" &lt;&lt; p1.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "p3:" &lt;&lt; p3.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; p2 = p3; p2-&gt;test(); std::cout &lt;&lt; "p2:" &lt;&lt; p2.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "p3:" &lt;&lt; p3.use_count() &lt;&lt; std::endl; std::cout &lt;&lt; "----------------" &lt;&lt; std::endl; return 0;&#125; 编译 1g++ -o example3 -std=c++11 example3.cpp 运行结果 123456789101112131415161718192021Test::Test() 1Test::test() 1p1:1----------------Test::Test() 2Test::test() 2p2:1----------------Test::test() 1p1:2p3:2----------------p1:0p3:1----------------Test::~Test() 2Test::test() 1p2:2p3:2----------------Test::~Test() 1 C++11的智能指针系列文章 C++11的智能指针(1) unique_ptr C++11的智能指针(2) shared_ptr]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>C++</tag>
+        <tag>C++0x</tag>
+        <tag>智能指针</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[给VMWare Fusion设置固定IP]]></title>
+    <url>%2F2016%2F10%2F15%2Fvmware-fusion-static-ip%2F</url>
+    <content type="text"><![CDATA[最近在Mac上用WMware Fusion跑Linux，主要是用来做server端的开发，通过ssh连到虚拟机里做操作。 因为记性不好，我一般都会在/etc/hosts里设置一条记录，给虚拟机一个域名，像是这样 12# ubuntu虚拟机192.168.110.132 ubuntu.vm 然后我就可以通过域名的方式登录虚拟机了，像这样 1ssh up4dev@ubuntu.vm 但是使用的过程中遇到了一个问题，有时候虚拟机重启后发现虚拟机的IP发生了变化，这就导致了hosts的设置失效，必须重新设置hosts。 那么怎么能让虚机IP固定下来呢，Google了一圈下来，终于有了比较靠谱的方式，说起来还有点小麻烦，不过按照下面的步骤一条一条的来，应该都会成功。 先说下我的环境，macOS版本是10.12，VMware Fusion的版本是8.5.0。 步骤1 - 查询虚拟机的MAC地址话不多说，直接上图 步骤2 - 修改dhcpd.confdhcpd.conf位于目录/Library/Preferences/VMware Fusion/vmnet8。 用你最喜欢的文本编辑器打开/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf，我这里用vim，需要用管理员权限sudo 1sudo vim /Library/Preferences/VMware\ Fusion/vmnet8/dhcpd.conf 看到的内容大概是这样： 12345678910111213141516171819202122232425262728293031323334353637383940414243# Configuration file for ISC 2.0 vmnet-dhcpd operating on vmnet8.## This file was automatically generated by the VMware configuration program.# See Instructions below if you want to modify it.## We set domain-name-servers to make some DHCP clients happy# (dhclient as configured in SuSE, TurboLinux, etc.).# We also supply a domain name to make pump (Red Hat 6.x) happy.####### VMNET DHCP Configuration. Start of &quot;DO NOT MODIFY SECTION&quot; ###### Modification Instructions: This section of the configuration file contains# information generated by the configuration program. Do not modify this# section.# You are free to modify everything else. Also, this section must start# on a new line# This file will get backed up with a different name in the same directory# if this section is edited and you try to configure DHCP again.# Written at: 09/14/2016 14:21:31allow unknown-clients;default-lease-time 1800; # default is 30 minutesmax-lease-time 7200; # default is 2 hourssubnet 192.168.110.0 netmask 255.255.255.0 &#123; range 192.168.110.128 192.168.110.254; option broadcast-address 192.168.110.255; option domain-name-servers 192.168.110.2; option domain-name localdomain; default-lease-time 1800; # default is 30 minutes max-lease-time 7200; # default is 2 hours option netbios-name-servers 192.168.110.2; option routers 192.168.110.2;&#125;host vmnet8 &#123; hardware ethernet 00:50:56:C0:00:08; fixed-address 192.168.110.1; option domain-name-servers 0.0.0.0; option domain-name &quot;&quot;; option routers 0.0.0.0;&#125;####### VMNET DHCP Configuration. End of &quot;DO NOT MODIFY SECTION&quot; ####### 我们在这个文件的最后添加以下内容： 1234host Ubuntu16.04_0 &#123; hardware ethernet 00:0C:29:79:EC:1A; fixed-address 192.168.110.130;&#125; 有三行内容值得注意： 第1行，Ubuntu16.04_0是虚拟机的名字，看下图，注意要拼写要完全一致。 第2行，00:0C:29:79:EC:1A是上一步获取的MAC地址。 第3行，192.168.110.130是要设置的固定IP地址，注意要在虚拟机的IP网段，一般情况下就用上次虚拟机运行时的动态IP就可以了。 步骤3 - 重启VMWare Fusion必须重启VMWare Fusion才能使上边的设置生效。 步骤4 - 启动虚拟机此时在启动虚拟机，你会发现虚拟机的地址不会再变来变去了，永远是你在步骤2设置的固定IP。 参考 Set a Static IP Address in VMware Fusion 7]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>工具</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++11的智能指针(1) unique_ptr]]></title>
+    <url>%2F2016%2F10%2F09%2Fcpp11-unique_ptr%2F</url>
+    <content type="text"><![CDATA[C++11新引入了几种智能指针：unique_ptr，shared_ptr和weak_ptr，而原来的auto_ptr被弃用。 我会写几篇文章分别来介绍这几种智能指针的用法，本篇主要介绍unique_ptr。 主要介绍unique_ptr的两个主要特性: 保存对象的指针，当unique_ptr本身释放的时候，自动调用对象的析构函数。 唯一拥有它指向的对象，无法通过拷贝构造或者等号进行赋值。 我们先定义一个简单的类作为示例： 12345678910111213141516171819202122//test.h#include &lt;iostream&gt;class Test &#123;public: //标准构造函数 Test(int tag) : tag(tag) &#123; std::cout &lt;&lt; "Test::Test(int) " &lt;&lt; tag &lt;&lt; std::endl; &#125; //标准析构函数 ~Test() &#123; std::cout &lt;&lt; "Test::~Test() " &lt;&lt; tag &lt;&lt; std::endl; &#125; //测试输出 void test() &#123; std::cout &lt;&lt; "Test::test() " &lt;&lt; tag &lt;&lt; std::endl; &#125;private: int tag;&#125;; 特性1 - 保存对象的指针，当unique_ptr本身释放的时候，自动调用对象的析构函数这是一个智能指针的本分，让我们免去烦人又容易出错的new/delete操作。 示例1 - 最简单场景1234567891011//example1.cpp#include &lt;iostream&gt;#include &lt;memory&gt;#include "test.h"int main() &#123; std::unique_ptr&lt;Test&gt; p(new Test(1)); p-&gt;test(); return 0;&#125; 编译并执行 12g++ -o example1 -std=c++11 example1.cpp./example1 输出结果 123Test::Test(int) 1Test::test() 1Test::~Test() 1 基本不需要解释，我们看到我们并没有调用delete但是Test的析构函数还是被调用了。 示例2 - 有异常的场景12345678910111213141516171819202122232425262728//example2.cpp#include &lt;iostream&gt;#include &lt;memory&gt;#include &lt;string&gt;#include "test.h"int test(int tag) &#123; std::unique_ptr&lt;Test&gt; p(new Test(tag)); if (tag / 2) &#123; throw "except, tag = " + std::to_string(tag); //抛出异常 &#125; return tag;&#125;int main() &#123; try &#123; int ret = test(1); //不会抛出异常 std::cout &lt;&lt; "test(1) return " &lt;&lt; ret &lt;&lt; std::endl; ret = test(2); //会抛出异常 //因为上边的语句会抛出异常，下边这句不会被执行 std::cout &lt;&lt; "test(2) return " &lt;&lt; ret &lt;&lt; std::endl; &#125; catch (std::string e) &#123; //异常抛出是会执行 std::cout &lt;&lt; "exception caught: " &lt;&lt; e &lt;&lt; std::endl; &#125; return 0;&#125; 编译并执行 12g++ -o example2 -std=c++11 example2.cpp./example2 输出结果 123456Test::Test(int) 1Test::~Test() 1test(1) return 1Test::Test(int) 2Test::~Test() 2exception caught: except, tag = 2 第一次调用test(1)的时候，没有异常抛出，函数正常返回，我们看到函数返回前，Test的析构函数得到了调用。 第二次调用test(2)的时候，函数抛出了异常，要是普通指针的话，因为函数并没有正常结束，异常之后的语句就不再被调用，包括delete语句，就造成了内存泄漏。然而本例中我们看到即使异常抛出，Test的析构函数还是得到了调用，这就是智能指针的功劳。 特性2 - 唯一拥有它指向的对象，无法通过拷贝构造或者等号进行赋值。这个特性就是unique_ptr独有的特性了。 理解这个特性，需要结合C++11新引入的move语义，move语义不在本文的讨论范围，以后有精力我可能会写一篇关于move语义的文章，现在你想了解move语义的话可以参考这几篇文章： C++11新特性：右值引用与move语义 C++11 标准新特性: 右值引用与转移语义 [译]详解C++右值引用 我们看一下下边的代码 12345678910111213141516171819202122232425262728293031323334//example3.cpp#include &lt;iostream&gt;#include &lt;memory&gt;#include "test.h"void passTest(std::unique_ptr&lt;Test&gt; t) &#123; t-&gt;test();&#125;std::unique_ptr&lt;Test&gt; getPtr(int tag) &#123; std::unique_ptr&lt;Test&gt; p(new Test(tag)); return p;&#125;int main() &#123; std::unique_ptr&lt;Test&gt; p = std::unique_ptr&lt;Test&gt;(new Test(1)); //(0) p-&gt;test(); // std::unique_ptr&lt;Test&gt; p1 = p; //(1)编译失败 // std::unique_ptr&lt;Test&gt; p1(p); //(2)编译失败 std::unique_ptr&lt;Test&gt; p1 = std::move(p); //(3)编译通过 p1-&gt;test(); //(4)正确 // p-&gt;test(); //(5)错误，未定义行为 p = std::unique_ptr&lt;Test&gt;(new Test(2)); // passTest(p); //(6)编译失败 passTest(std::move(p)); //(7)编译通过 passTest(std::unique_ptr&lt;Test&gt;(new Test(3))); //(8)编译通过 p = getPtr(4); //(9)函数返回 return 0;&#125; 编译并执行 12g++ -o example3 -std=c++11 example3.cpp./example3 输出结果 12345678910Test::Test(int) 1Test::test() 1Test::test() 1Test::Test(int) 2Test::test() 2Test::~Test() 2Test::Test(int) 3Test::test() 3Test::~Test() 3Test::~Test() 1 这个例子主要是展示了unique_ptr的唯一性，也就是说unique_ptr唯一持有它指向的对象，无法通过赋值(1)或者拷贝构造(2)的方式进行初始化，它只能接受右值语义的参数来构造(0)(3)。 (4)(5)展示了move之后p已经失效。 (6)(7)(8)则展示了作为函数参数传递，同样要满足右值语义才可以。 (9)展示了作为函数返回值给unique_ptr赋值，这同样是满足右值语义的。 上边的这几个例子都说明了unique_ptr的唯一性，我们可以理解成任意时刻，只要你持有一个合法的unique_ptr，就可以保证你是唯一的一个持有人，不会出现另一个unique_ptr跟你相同的情况。]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>C++</tag>
+        <tag>C++0x</tag>
+        <tag>智能指针</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用network create解决Docker容器互相连接的问题]]></title>
+    <url>%2F2016%2F10%2F09%2Fdocker-network-create%2F</url>
+    <content type="text"><![CDATA[目前在做一个P2P的程序，为了方便测试和部署，我们用docker来运行相同的程序实例。 作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头… 通常情况下，我们是通过在启动容器的时候传入--link参数的方式访问其他的容器的。 比如我们的一个容器要访问mysql，我们这样启动mysql(注意--name参数)： 1docker run -e MYSQL_ROOT_PASSWORD=password --name=mysql -d mysql 然后我们的需要访问mysql的容器这样启动(注意--link参数) 1docker run --name=my_container --link mysql:mysql my/my_image 这样，在我们新启动的容器my_container里就能够以域名mysql来访问mysql容器了。 可现在的情况是，作为一个P2P的程序，我们要启动两个容器(至少两个)container_a和container_b。希望container_a能访问container_b，并且container_b可以访问container_a，用跟上边同样的思路我们会想到这样启动 12docker run --name=container_a --link container_b:container_b -d my/my_imagedocker run --name=container_b --link container_a:container_a -d my/my_image 但是问题来了，当我们执行第一句命令时，docker会告诉我们，container_b不存在，可不是么，container_b此时还没有启动，当然是不存在的。这就造成了一种困境，container_a和container_b两者是相互依赖的，二者无论先启动谁，都要求先启动另一者，这种方式根本解决不了这个问题。 那么这种容器互相连接的问题怎么解决呢？就要轮到本文重点docker network create登场了。 首先我们先创建一个network 1docker network create my-net 通过执行命令可以查看到我们创建的网络 1docker network ls 结果应该类似下面这样 123cbd1aa22d04a bridge bridge local33be010f6cd9 host host local628c2540d5d3 my-net bridge local 我们看到my-net在这个列表中，然后我们就要利用这个新建的my-net网络来启动我们的容器。 12docker run --net=my-net --net-alias=container_a --name=container_a -d my/my_imagedocker run --net=my-net --net-alias=container_b --name=container_b -d my/my_image 我们通过--net参数指定容器使用的网络，通过--net-alias指定容器在这个网络中的别名，这样在这个网络中的所有的容器就都可以通过这个份别名作为域名来访问到该容器了。]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git修改提交记录的用户名和邮箱]]></title>
+    <url>%2F2016%2F10%2F08%2Fgit-commit-user-modify%2F</url>
+    <content type="text"><![CDATA[有时候，我们进行了一次commit之后发现，用户名和邮箱错了。为什么会有这种情况，往往我们在公司和个人的项目中，会使用不同的名称和邮箱，这样一来，电脑中就有了两套用户名和邮箱的配置，或者是公司的是默认，或者是个人的是默认的，但是开始一个新项目的时候，如果正好忘了修改项目的配置，就会出现提交用户不正确的情况。 一旦出现了这种情况的话，该怎么处理呢？ 如果这次提交是你的最后一次提交，那么很简单，通过下面的命令修改最后一次提交的用户名和邮箱地址： 1git commit --amend --author='yourname &lt;yourname@email.com&gt;' 如果已经推送到了远端服务器，通过下面的命令将修改强制推送到远端服务器就可以了： 1git push origin develop -f 参考文献 StackOverflow: Change commit author at one specific commit Git 基础 - 撤消操作]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[巧用Xcode的Target管理开发和生产的APP版本]]></title>
+    <url>%2F2015%2F09%2F07%2Fuse-xcode-targets%2F</url>
+    <content type="text"><![CDATA[APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。 遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。 其实，Xcode的Target功能能够很好地解决这个问题。 我们新建一个项目来说明怎么做，项目的名字叫MultiTargetPrj。 Xcode默认给我们创建了两个Target，一个是MultiTargetPrj，另一个是MultiTargetPrjTests。MultiTargetPrjTests是单元测试的Target，我们暂且忽略。 我们用MultiTargetPrj作为正式版，在此基础上我们新建一个Target来做开发版应用。如下图，在已有的MultiTargetPrj Target上点击右键，在菜单中选择Duplicate。 这样Xcode就为我们创建了一个名为MultiTargetPrj copy的Target，如下图 后边带个copy尾巴的名字太不优雅了，让我们重命名一下，要重命名的地方不少，我们还是直接看图吧： 然后重命名Schemes： 最后然我们编辑一下info.plist，让应用在屏幕上显示的名字各不相同，正式版叫MT，开发版叫MT Dev，如下图所示： 我们在界面上放置一个label，预期在运行正式版的应用时，显示正式版，测试版的应用时，显示开发版。 为了让程序可以区分正式版和测试版，我们给开发版的target中设置一个预定义宏MULTITARGET_DEV: 然后我们用一段代码来区分版本，设置不同的版本的文字： 123456789- (void)viewDidLoad &#123; [super viewDidLoad]; // Do any additional setup after loading the view, typically from a nib.#ifndef MULTITARGET_DEV self.label.text = @"正式版";#else self.label.text = @"开发版";#endif&#125; 分别运行一次两个Target，我们看到的主屏是这样的： 两个Target的运行结果是这个样子的： 我把这个测试程序的代码放到了GitHub: andyzhshg/MultiTarget]]></content>
+      <categories>
+        <category>移动开发</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[新的开始]]></title>
+    <url>%2F2015%2F09%2F07%2Fnew-start%2F</url>
+    <content type="text"><![CDATA[人啊，信誓旦旦说一些事情的时候是一回事，但是真正坚持做下去，却是另一回事。 写博客这件事，说了好几年，但是实际上这么多年下来，却几乎是没有写什么东西。 计划主要还是写一些技术相关的东西，算下来工作已经6年有余了，学了很多东西，但都称不上精通。杂七杂八，学了不知道多少种技术，最终混成了一个杂学家，也是有些惭愧呢。开这个博客，主要还是想借这个契机，整理和消化一些自己的所学，给自己的技术历程一个简单的记录，如果能够帮到误打误撞看到这些文章的人，也算是锦上添花了。 如果有闲情逸致呢，可能会把还能拿得出手的非技术的散文也发在这里，如果酸倒了诸位看客的牙齿，也非我故意，是你运气不好罢了。 这篇文章叫新的开始，但愿这次开始，是真正的开始，并坚持下去。]]></content>
+      <categories>
+        <category>杂</category>
+      </categories>
+      <tags>
+        <tag>牢骚</tag>
+        <tag>非技术</tag>
+      </tags>
+  </entry>
+</search>
