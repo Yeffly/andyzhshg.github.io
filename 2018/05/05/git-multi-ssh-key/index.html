@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content=",,,," />
+  <meta name="keywords" content="技术,git,github,ssh," />
 
 
 
@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。 虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。 本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。 我们先来提炼一下比特币诞生的愿景">
-<meta name="keywords" content="区块链,比特币,BitCoin,技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="白话比特币">
-<meta property="og:url" content="http://www.up4dev.com/draft/bitcoin-make-simple.html">
+<meta name="description" content="管理多个github账号的 ssh key我们大多时候是通过ssh key的方式来进行github代码库的权限管理，如何生成一个ssh key以及如何在github设置网络上有各类的说明，不是本文的重点。本文要解决的是在一个机器上管理多个账号的方法。 出于各种原因，有些人会有多个github账号，比如一个个人账号，一个工作账号。而github是不允许两个账号出现相同的SSH KEY的。那么问题来了">
+<meta name="keywords" content="技术,git,github,ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="管理多个github账号的 ssh key">
+<meta property="og:url" content="http://www.up4dev.com/2018/05/05/git-multi-ssh-key/index.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:description" content="比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。 虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。 本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。 我们先来提炼一下比特币诞生的愿景">
-<meta property="og:updated_time" content="2017-05-25T15:45:30.000Z">
+<meta property="og:description" content="管理多个github账号的 ssh key我们大多时候是通过ssh key的方式来进行github代码库的权限管理，如何生成一个ssh key以及如何在github设置网络上有各类的说明，不是本文的重点。本文要解决的是在一个机器上管理多个账号的方法。 出于各种原因，有些人会有多个github账号，比如一个个人账号，一个工作账号。而github是不允许两个账号出现相同的SSH KEY的。那么问题来了">
+<meta property="og:updated_time" content="2018-05-08T08:17:30.056Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="白话比特币">
-<meta name="twitter:description" content="比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。 虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。 本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。 我们先来提炼一下比特币诞生的愿景">
+<meta name="twitter:title" content="管理多个github账号的 ssh key">
+<meta name="twitter:description" content="管理多个github账号的 ssh key我们大多时候是通过ssh key的方式来进行github代码库的权限管理，如何生成一个ssh key以及如何在github设置网络上有各类的说明，不是本文的重点。本文要解决的是在一个机器上管理多个账号的方法。 出于各种原因，有些人会有多个github账号，比如一个个人账号，一个工作账号。而github是不允许两个账号出现相同的SSH KEY的。那么问题来了">
 
 
 
@@ -117,16 +117,10 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/draft/bitcoin-make-simple.html"/>
+  <link rel="canonical" href="http://www.up4dev.com/2018/05/05/git-multi-ssh-key/"/>
 
 
-  <title>
-  
-
-  
-    白话比特币 | UP4DEV
-  
-</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 管理多个github账号的 ssh key | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -165,7 +159,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -288,26 +282,189 @@
 
   <div id="posts" class="posts-expand">
     
-    
-      <p>比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。</p>
-<p>虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。</p>
-<p>本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。</p>
-<p>我们先来提炼一下比特币诞生的愿景：构建一种去中心化的无需中央机构的电子现金系统。</p>
-<p>上边这句话看不懂不要紧，我们一步一步来解释。</p>
-<p>要理解这句话，我们首先来了解下现实社会中的货币系统是如何运作的。</p>
-<p>货币由国家发行，国家会尽力的保证货币的实际价值<br>现在的货币，发行方是国家，攥在手里的现金之所以被认为有价值，是因为由国家在后面为其背书，也就是说我们信任国家可以保证我们的钞票的价值。</p>
-<p>与之类似，很多商家会发行代金券，这些代金券本质上就是几张纸而已，我们之所以会去用真金白银购买，也是因为</p>
-<h2 id="电子现金系统"><a href="#电子现金系统" class="headerlink" title="电子现金系统"></a>电子现金系统</h2><p>所谓电子现金系统，我们可以类比一下银行系统。</p>
-<p>如果不考虑物理现金，自考虑电子账户的话，以用户的视角来说，银行要做的，核心是两件事：</p>
-<ul>
-<li>记录——记住我的账户上有多少钱</li>
-<li>转账——我转账给别人，别人转账给我</li>
-</ul>
-<p>简化点来说，你存在银行里的钱，其实就是银行系统里的一个数字，你转账给别人，就是在你的系统账户上减掉一个数字，在对方的账户上加上一个数字。</p>
-<p>比特币核心要做的也是这两件事，记录和转账。</p>
-<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>传统的银行，数据是存储在银行自己的中心化的服务器上的，也就是说，如果银行的服务器出现了故障，那么，你的账户数据也很可能会受到影响(当然这种事情发生的)。</p>
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                管理多个github账号的 ssh key
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-05T16:14:00+08:00" content="2018-05-05">
+              2018-05-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/05/git-multi-ssh-key/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/05/git-multi-ssh-key/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="管理多个github账号的-ssh-key"><a href="#管理多个github账号的-ssh-key" class="headerlink" title="管理多个github账号的 ssh key"></a>管理多个<code>github</code>账号的 <code>ssh key</code></h1><p>我们大多时候是通过<code>ssh key</code>的方式来进行<code>github</code>代码库的权限管理，如何生成一个<code>ssh key</code>以及如何在<code>github</code>设置网络上有各类的说明，不是本文的重点。本文要解决的是在一个机器上管理多个账号的方法。</p>
+<p>出于各种原因，有些人会有多个github账号，比如一个个人账号，一个工作账号。而github是不允许两个账号出现相同的SSH KEY的。那么问题来了，我们为了方便，往往都是用<code>ss-keygen</code>命令，一路默认参数在<code>~/.ssh</code>目录下生成一对名为<code>id_rsa</code>和<code>id_rsa.pub</code>的密钥，然后把<code>id_rsa.pub</code>贴到github的<code>SSH and GPG keys</code>设置中去。</p>
+<p>如何生成一个新的密钥给另一个账号，并且在使用的过程中尽量减少麻烦呢，我这里给出一种相对简便的方法。</p>
+<h2 id="1-生成一对命名的ssh-key"><a href="#1-生成一对命名的ssh-key" class="headerlink" title="1. 生成一对命名的ssh key"></a>1. 生成一对命名的<code>ssh key</code></h2><p>首先生成一对新的<code>ssh key</code>，依然是用<code>ssh-keygen</code>命令，只是这次不用默认的参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">ssh-keygen</div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/YourHomeDir/.ssh/id_rsa):/YourHomeDir/.ssh/account1</div><div class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):</div><div class="line">Enter same passphrase again:</div><div class="line">Your identification has been saved <span class="keyword">in</span> /YourHomeDir/.ssh/account1.</div><div class="line">Your public key has been saved <span class="keyword">in</span> /YourHomeDir/.ssh/account1.pub.</div><div class="line">The key fingerprint is:</div><div class="line">SHA256:...</div><div class="line">The key<span class="string">'s randomart image is:</span></div><div class="line">+---[RSA 2048]----+</div><div class="line">| . .o+.oo        |</div><div class="line">|. oo. ..ooo o    |</div><div class="line">|o+o.+o .oo.+ =   |</div><div class="line">|=+ .o.Eo... = .  |</div><div class="line">|+    .  S. o .   |</div><div class="line">| .    o . o      |</div><div class="line">|       B *       |</div><div class="line">|      o X *      |</div><div class="line">|      .o B..     |</div><div class="line">+----[SHA256]-----+</div></pre></td></tr></table></figure>
+<p>需要关注的是上边命令中的第3行，我们输入了<code>/YourHomeDir/.ssh/account1</code>，也就是我们所希望的ssh密钥的名字以及路径，其他步骤基本都一样，一路默认参数回车就可以了。这是我们在<code>/YourHomeDir/.ssh/</code>路径下生成了一对名为<code>account1</code>和<code>account1.pub</code>的新秘钥。</p>
+<blockquote>
+<p>一定要注意新秘钥的命名，不要覆盖掉旧的秘钥造成不必要的麻烦。</p>
+</blockquote>
+<h2 id="2-更改本地的SSH配置"><a href="#2-更改本地的SSH配置" class="headerlink" title="2. 更改本地的SSH配置"></a>2. 更改本地的SSH配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.ssh</div><div class="line">touch config</div><div class="line">vim config</div></pre></td></tr></table></figure>
+<p>上面的命令在ssh配置目录创建(如果不存在)一个<code>config</code>文件，并用<code>vim</code>打开编辑。通过<code>vim</code>编辑加入如下配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 配置示例1</div><div class="line">Host xxxx</div><div class="line">    HostName github.com</div><div class="line">    IdentityFile ~/.ssh/account1</div></pre></td></tr></table></figure>
+<p>其中第1行中的<code>xxxx</code>是一个代替github.com的名字，你可以用一个自己比较容易记得域名，比如我就比较喜欢这样：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 配置示例2</div><div class="line">Host my-github-name.github.com</div><div class="line">    HostName github.com</div><div class="line">    IdentityFile ~/.ssh/account1</div></pre></td></tr></table></figure>
+<p>其中<code>my-github-name</code>是对应我生成的这个<code>ssh key</code>的<code>github</code>账号的名字。</p>
+<h2 id="3-将新生成的ssh-key加到github账号配置下"><a href="#3-将新生成的ssh-key加到github账号配置下" class="headerlink" title="3. 将新生成的ssh key加到github账号配置下"></a>3. 将新生成的<code>ssh key</code>加到github账号配置下</h2><p>将第一步生成的秘钥对中的<code>account1.pub</code>的内加入github账号的<code>SSH and GPG keys</code>设置项中。因为是一个全新的秘钥，自是不会再出现添加不进去的问题。</p>
+<h2 id="4-克隆新的项目"><a href="#4-克隆新的项目" class="headerlink" title="4. 克隆新的项目"></a>4. 克隆新的项目</h2><p>一般情况下，我们是通过如下的方式克隆一个项目：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git@github.com:your-account/your-prj.git</div></pre></td></tr></table></figure>
+<p>我们需要对这个语句中的域名部分做一下修改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 对应配置示例1</span></div><div class="line">git <span class="built_in">clone</span> git@xxxx:your-account/your-prj.git</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 对应配置示例2</span></div><div class="line">git <span class="built_in">clone</span> git@my-github-name.github.com:your-account/your-prj.git</div></pre></td></tr></table></figure>
+<p>这时，我们就是通过新的<code>ssh key</code>来<code>clone</code>的代码，在此之后的操作就没有区别了，一切按照之前的使用习惯即可，无论是<code>pull</code>还是<code>push</code>代码等操作都使用新的<code>ssh key</code>来进行了。</p>
+<blockquote>
+<p>这里补充说一个可能跟<code>ssh key</code>的关系不大，但是跟多账号有关的问题，是关于<code>commit</code>代码的账号的设置的。如果默认不处理，提交代码的时候提交信息中的用户和邮箱信息是用户设置的全局账户的信息，当时应该是这样设置的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; git config --global user.name <span class="string">"You Name"</span></div><div class="line">&gt; git config --global user.email name@example.com</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>我们往往是要给不同项目设置不同的提交信息，毕竟你不想把公司的邮箱带到私人项目的提交记录中去。可以通过下边的方式文每个项目单独设置提交账户信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="built_in">cd</span> YourRepoPath</div><div class="line">&gt; git config user.name <span class="string">"You Name"</span></div><div class="line">&gt; git config user.email name@example.com</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>其实很简单，就是去掉<code>--global</code>参数。</p>
+</blockquote>
+<hr>
+<p>我们的第一个账号是通过默认方式添加的，所以如果没有用自定义域名添加的项目都是使用的默认的密钥即<code>id_rsa</code>，为了使用方便，可以让自己使用最频繁(或者是项目最多的账户)使用这个默认配置。</p>
+<p>如果你有更多的账号，通过上边的方法来生成更多的<code>ssh key</code>并通过自定义域名的方式对不同账号的项目进行区分即可。</p>
+<p>本方法同样适用于<code>gitlab</code>的多账号情境。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag">#技术</a>
+          
+            <a href="/tags/git/" rel="tag">#git</a>
+          
+            <a href="/tags/github/" rel="tag">#github</a>
+          
+            <a href="/tags/ssh/" rel="tag">#ssh</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/11/synology-ssl-cert-update/" rel="next" title="群晖 Let's Encrypt 证书的自动更新">
+                <i class="fa fa-chevron-left"></i> 群晖 Let's Encrypt 证书的自动更新
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -346,8 +503,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://up4dev.oss-cn-qingdao.aliyuncs.com/up.jpg"
@@ -417,6 +583,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#管理多个github账号的-ssh-key"><span class="nav-number">1.</span> <span class="nav-text">管理多个github账号的 ssh key</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-生成一对命名的ssh-key"><span class="nav-number">1.1.</span> <span class="nav-text">1. 生成一对命名的ssh key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-更改本地的SSH配置"><span class="nav-number">1.2.</span> <span class="nav-text">2. 更改本地的SSH配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-将新生成的ssh-key加到github账号配置下"><span class="nav-number">1.3.</span> <span class="nav-text">3. 将新生成的ssh key加到github账号配置下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-克隆新的项目"><span class="nav-number">1.4.</span> <span class="nav-text">4. 克隆新的项目</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -513,6 +690,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5"></script>
+
+
 
   
 
@@ -529,9 +710,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = 'draft/bitcoin-make-simple.html';
-      var disqus_title = "白话比特币";
-      var disqus_url = 'http://www.up4dev.com/draft/bitcoin-make-simple.html';
+      var disqus_identifier = '2018/05/05/git-multi-ssh-key/';
+      var disqus_title = "管理多个github账号的 ssh key";
+      var disqus_url = 'http://www.up4dev.com/2018/05/05/git-multi-ssh-key/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');

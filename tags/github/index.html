@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content=",,,," />
+  <meta name="keywords" content="区块链, blockchain, C++, iOS, server, p2p" />
 
 
 
@@ -86,17 +86,12 @@
 
 
 
-<meta name="description" content="比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。 虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。 本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。 我们先来提炼一下比特币诞生的愿景">
-<meta name="keywords" content="区块链,比特币,BitCoin,技术">
 <meta property="og:type" content="website">
-<meta property="og:title" content="白话比特币">
-<meta property="og:url" content="http://www.up4dev.com/draft/bitcoin-make-simple.html">
+<meta property="og:title" content="UP4DEV">
+<meta property="og:url" content="http://www.up4dev.com/tags/github/index.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:description" content="比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。 虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。 本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。 我们先来提炼一下比特币诞生的愿景">
-<meta property="og:updated_time" content="2017-05-25T15:45:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="白话比特币">
-<meta name="twitter:description" content="比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。 虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。 本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。 我们先来提炼一下比特币诞生的愿景">
+<meta name="twitter:title" content="UP4DEV">
 
 
 
@@ -117,16 +112,10 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/draft/bitcoin-make-simple.html"/>
+  <link rel="canonical" href="http://www.up4dev.com/tags/github/"/>
 
 
-  <title>
-  
-
-  
-    白话比特币 | UP4DEV
-  
-</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 标签: github | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -286,29 +275,46 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
+  <div id="posts" class="posts-collapse">
+    <div class="collection-title">
+      <h2 >
+        github
+        <small>标签</small>
+      </h2>
+    </div>
+
     
-    
-      <p>比特币诞生短短8年，从一个仅在小众极客圈里流行的小玩意儿，逐渐变成了几乎像我丈母娘这样的生活在县城的老太太都听说过的流行的东西。</p>
-<p>虽然人人都在谈论比特币，但是能讲明白比特币到底是什么的，恐怕并不是很多，包括那些炒币炒的热火朝天的炒家们。</p>
-<p>本文尝试用通俗的方式来解释一下比特币的技术原理，至于比特币为什么这么火，为什么这么值钱，不是本文的讨论内容，我的能力也解释不了。</p>
-<p>我们先来提炼一下比特币诞生的愿景：构建一种去中心化的无需中央机构的电子现金系统。</p>
-<p>上边这句话看不懂不要紧，我们一步一步来解释。</p>
-<p>要理解这句话，我们首先来了解下现实社会中的货币系统是如何运作的。</p>
-<p>货币由国家发行，国家会尽力的保证货币的实际价值<br>现在的货币，发行方是国家，攥在手里的现金之所以被认为有价值，是因为由国家在后面为其背书，也就是说我们信任国家可以保证我们的钞票的价值。</p>
-<p>与之类似，很多商家会发行代金券，这些代金券本质上就是几张纸而已，我们之所以会去用真金白银购买，也是因为</p>
-<h2 id="电子现金系统"><a href="#电子现金系统" class="headerlink" title="电子现金系统"></a>电子现金系统</h2><p>所谓电子现金系统，我们可以类比一下银行系统。</p>
-<p>如果不考虑物理现金，自考虑电子账户的话，以用户的视角来说，银行要做的，核心是两件事：</p>
-<ul>
-<li>记录——记住我的账户上有多少钱</li>
-<li>转账——我转账给别人，别人转账给我</li>
-</ul>
-<p>简化点来说，你存在银行里的钱，其实就是银行系统里的一个数字，你转账给别人，就是在你的系统账户上减掉一个数字，在对方的账户上加上一个数字。</p>
-<p>比特币核心要做的也是这两件事，记录和转账。</p>
-<h2 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h2><p>传统的银行，数据是存储在银行自己的中心化的服务器上的，也就是说，如果银行的服务器出现了故障，那么，你的账户数据也很可能会受到影响(当然这种事情发生的)。</p>
+      
+
+  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2018/05/05/git-multi-ssh-key/" itemprop="url">
+              
+                <span itemprop="name">管理多个github账号的 ssh key</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-05-05T16:14:00+08:00"
+              content="2018-05-05" >
+          05-05
+        </time>
+      </div>
+
+    </header>
+  </article>
+
 
     
   </div>
+
+  
 
 
           </div>
@@ -316,17 +322,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -529,9 +524,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = 'draft/bitcoin-make-simple.html';
-      var disqus_title = "白话比特币";
-      var disqus_url = 'http://www.up4dev.com/draft/bitcoin-make-simple.html';
+      var disqus_identifier = 'tags/github/index.html';
+      var disqus_title = "";
+      var disqus_url = '';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
@@ -542,13 +537,6 @@
       }
 
       run_disqus_script('count.js');
-      
-        var disqus_config = function () {
-            this.page.url = disqus_url;
-            this.page.identifier = disqus_identifier;
-            this.page.title = disqus_title;
-        };
-        run_disqus_script('embed.js');
       
     </script>
   

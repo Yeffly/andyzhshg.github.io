@@ -299,6 +299,164 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/05/git-multi-ssh-key/" itemprop="url">
+                  管理多个github账号的 ssh key
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-05T16:14:00+08:00" content="2018-05-05">
+              2018-05-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/05/git-multi-ssh-key/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/05/git-multi-ssh-key/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="管理多个github账号的-ssh-key"><a href="#管理多个github账号的-ssh-key" class="headerlink" title="管理多个github账号的 ssh key"></a>管理多个<code>github</code>账号的 <code>ssh key</code></h1><p>我们大多时候是通过<code>ssh key</code>的方式来进行<code>github</code>代码库的权限管理，如何生成一个<code>ssh key</code>以及如何在<code>github</code>设置网络上有各类的说明，不是本文的重点。本文要解决的是在一个机器上管理多个账号的方法。</p>
+<p>出于各种原因，有些人会有多个github账号，比如一个个人账号，一个工作账号。而github是不允许两个账号出现相同的SSH KEY的。那么问题来了，我们为了方便，往往都是用<code>ss-keygen</code>命令，一路默认参数在<code>~/.ssh</code>目录下生成一对名为<code>id_rsa</code>和<code>id_rsa.pub</code>的密钥，然后把<code>id_rsa.pub</code>贴到github的<code>SSH and GPG keys</code>设置中去。</p>
+<p>如何生成一个新的密钥给另一个账号，并且在使用的过程中尽量减少麻烦呢，我这里给出一种相对简便的方法。</p>
+<h2 id="1-生成一对命名的ssh-key"><a href="#1-生成一对命名的ssh-key" class="headerlink" title="1. 生成一对命名的ssh key"></a>1. 生成一对命名的<code>ssh key</code></h2><p>首先生成一对新的<code>ssh key</code>，依然是用<code>ssh-keygen</code>命令，只是这次不用默认的参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">ssh-keygen</div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/YourHomeDir/.ssh/id_rsa):/YourHomeDir/.ssh/account1</div><div class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):</div><div class="line">Enter same passphrase again:</div><div class="line">Your identification has been saved <span class="keyword">in</span> /YourHomeDir/.ssh/account1.</div><div class="line">Your public key has been saved <span class="keyword">in</span> /YourHomeDir/.ssh/account1.pub.</div><div class="line">The key fingerprint is:</div><div class="line">SHA256:...</div><div class="line">The key<span class="string">'s randomart image is:</span></div><div class="line">+---[RSA 2048]----+</div><div class="line">| . .o+.oo        |</div><div class="line">|. oo. ..ooo o    |</div><div class="line">|o+o.+o .oo.+ =   |</div><div class="line">|=+ .o.Eo... = .  |</div><div class="line">|+    .  S. o .   |</div><div class="line">| .    o . o      |</div><div class="line">|       B *       |</div><div class="line">|      o X *      |</div><div class="line">|      .o B..     |</div><div class="line">+----[SHA256]-----+</div></pre></td></tr></table></figure>
+<p>需要关注的是上边命令中的第3行，我们输入了<code>/YourHomeDir/.ssh/account1</code>，也就是我们所希望的ssh密钥的名字以及路径，其他步骤基本都一样，一路默认参数回车就可以了。这是我们在<code>/YourHomeDir/.ssh/</code>路径下生成了一对名为<code>account1</code>和<code>account1.pub</code>的新秘钥。</p>
+<blockquote>
+<p>一定要注意新秘钥的命名，不要覆盖掉旧的秘钥造成不必要的麻烦。</p>
+</blockquote>
+<h2 id="2-更改本地的SSH配置"><a href="#2-更改本地的SSH配置" class="headerlink" title="2. 更改本地的SSH配置"></a>2. 更改本地的SSH配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.ssh</div><div class="line">touch config</div><div class="line">vim config</div></pre></td></tr></table></figure>
+<p>上面的命令在ssh配置目录创建(如果不存在)一个<code>config</code>文件，并用<code>vim</code>打开编辑。通过<code>vim</code>编辑加入如下配置：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 配置示例1</div><div class="line">Host xxxx</div><div class="line">    HostName github.com</div><div class="line">    IdentityFile ~/.ssh/account1</div></pre></td></tr></table></figure>
+<p>其中第1行中的<code>xxxx</code>是一个代替github.com的名字，你可以用一个自己比较容易记得域名，比如我就比较喜欢这样：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 配置示例2</div><div class="line">Host my-github-name.github.com</div><div class="line">    HostName github.com</div><div class="line">    IdentityFile ~/.ssh/account1</div></pre></td></tr></table></figure>
+<p>其中<code>my-github-name</code>是对应我生成的这个<code>ssh key</code>的<code>github</code>账号的名字。</p>
+<h2 id="3-将新生成的ssh-key加到github账号配置下"><a href="#3-将新生成的ssh-key加到github账号配置下" class="headerlink" title="3. 将新生成的ssh key加到github账号配置下"></a>3. 将新生成的<code>ssh key</code>加到github账号配置下</h2><p>将第一步生成的秘钥对中的<code>account1.pub</code>的内加入github账号的<code>SSH and GPG keys</code>设置项中。因为是一个全新的秘钥，自是不会再出现添加不进去的问题。</p>
+<h2 id="4-克隆新的项目"><a href="#4-克隆新的项目" class="headerlink" title="4. 克隆新的项目"></a>4. 克隆新的项目</h2><p>一般情况下，我们是通过如下的方式克隆一个项目：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git@github.com:your-account/your-prj.git</div></pre></td></tr></table></figure>
+<p>我们需要对这个语句中的域名部分做一下修改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 对应配置示例1</span></div><div class="line">git <span class="built_in">clone</span> git@xxxx:your-account/your-prj.git</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 对应配置示例2</span></div><div class="line">git <span class="built_in">clone</span> git@my-github-name.github.com:your-account/your-prj.git</div></pre></td></tr></table></figure>
+<p>这时，我们就是通过新的<code>ssh key</code>来<code>clone</code>的代码，在此之后的操作就没有区别了，一切按照之前的使用习惯即可，无论是<code>pull</code>还是<code>push</code>代码等操作都使用新的<code>ssh key</code>来进行了。</p>
+<blockquote>
+<p>这里补充说一个可能跟<code>ssh key</code>的关系不大，但是跟多账号有关的问题，是关于<code>commit</code>代码的账号的设置的。如果默认不处理，提交代码的时候提交信息中的用户和邮箱信息是用户设置的全局账户的信息，当时应该是这样设置的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; git config --global user.name <span class="string">"You Name"</span></div><div class="line">&gt; git config --global user.email name@example.com</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>我们往往是要给不同项目设置不同的提交信息，毕竟你不想把公司的邮箱带到私人项目的提交记录中去。可以通过下边的方式文每个项目单独设置提交账户信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="built_in">cd</span> YourRepoPath</div><div class="line">&gt; git config user.name <span class="string">"You Name"</span></div><div class="line">&gt; git config user.email name@example.com</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>其实很简单，就是去掉<code>--global</code>参数。</p>
+</blockquote>
+<hr>
+<p>我们的第一个账号是通过默认方式添加的，所以如果没有用自定义域名添加的项目都是使用的默认的密钥即<code>id_rsa</code>，为了使用方便，可以让自己使用最频繁(或者是项目最多的账户)使用这个默认配置。</p>
+<p>如果你有更多的账号，通过上边的方法来生成更多的<code>ssh key</code>并通过自定义域名的方式对不同账号的项目进行区分即可。</p>
+<p>本方法同样适用于<code>gitlab</code>的多账号情境。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/09/11/synology-ssl-cert-update/" itemprop="url">
                   群晖 Let's Encrypt 证书的自动更新
                 </a>
@@ -928,6 +1086,129 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
+                  用network create解决Docker容器互相连接的问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-09T20:00:00+08:00" content="2016-10-09">
+              2016-10-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/09/docker-network-create/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/docker-network-create/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>目前在做一个P2P的程序，为了方便测试和部署，我们用<code>docker</code>来运行相同的程序实例。</p>
+<p>作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头…</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/10/09/docker-network-create/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/09/cpp11-unique_ptr/" itemprop="url">
                   C++11的智能指针(1) unique_ptr
                 </a>
@@ -1006,129 +1287,6 @@
 </ol>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/10/09/cpp11-unique_ptr/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
-                  用network create解决Docker容器互相连接的问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-09T20:00:00+08:00" content="2016-10-09">
-              2016-10-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/09/docker-network-create/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/docker-network-create/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>目前在做一个P2P的程序，为了方便测试和部署，我们用<code>docker</code>来运行相同的程序实例。</p>
-<p>作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头…</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/09/docker-network-create/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1405,133 +1563,13 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/07/new-start/" itemprop="url">
-                  新的开始
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-07T18:15:15+08:00" content="2015-09-07">
-              2015-09-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/杂/" itemprop="url" rel="index">
-                    <span itemprop="name">杂</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/07/new-start/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/09/07/new-start/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>人啊，信誓旦旦说一些事情的时候是一回事，但是真正坚持做下去，却是另一回事。</p>
-<p>写博客这件事，说了好几年，但是实际上这么多年下来，却几乎是没有写什么东西。</p>
-<p>计划主要还是写一些技术相关的东西，算下来工作已经6年有余了，学了很多东西，但都称不上精通。杂七杂八，学了不知道多少种技术，最终混成了一个杂学家，也是有些惭愧呢。开这个博客，主要还是想借这个契机，整理和消化一些自己的所学，给自己的技术历程一个简单的记录，如果能够帮到误打误撞看到这些文章的人，也算是锦上添花了。</p>
-<p>如果有闲情逸致呢，可能会把还能拿得出手的非技术的散文也发在这里，如果酸倒了诸位看客的牙齿，也非我故意，是你运气不好罢了。</p>
-<p>这篇文章叫新的开始，但愿这次开始，是真正的开始，并坚持下去。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1570,7 +1608,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1587,7 +1625,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1644,7 +1682,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
