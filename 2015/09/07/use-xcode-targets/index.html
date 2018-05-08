@@ -93,23 +93,23 @@
 <meta property="og:url" content="http://www.up4dev.com/2015/09/07/use-xcode-targets/index.html">
 <meta property="og:site_name" content="UP4DEV">
 <meta property="og:description" content="APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。 遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。 其实，Xcode的Target功能能够很好地解决这个问题。">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/duplicate0.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/duplicate1.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/rename0.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/rename1.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/rename2.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/display0.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/display0.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/xib.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/macro.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/home.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/run0.png">
-<meta property="og:image" content="http://cdn.up4dev.com/multitarget/run1.png">
-<meta property="og:updated_time" content="2016-11-21T05:01:05.000Z">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate0.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate1.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename0.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename1.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename2.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/xib.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/macro.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/home.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run0.png">
+<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run1.png">
+<meta property="og:updated_time" content="2018-05-08T15:47:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="巧用Xcode的Target管理开发和生产的APP版本">
 <meta name="twitter:description" content="APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。 遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。 其实，Xcode的Target功能能够很好地解决这个问题。">
-<meta name="twitter:image" content="http://cdn.up4dev.com/multitarget/duplicate0.png">
+<meta name="twitter:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate0.png">
 
 
 
@@ -326,7 +326,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-07T19:06:01+08:00" content="2015-09-07">
+            <time itemprop="dateCreated" datetime="2015-09-07T11:06:01+00:00" content="2015-09-07">
               2015-09-07
             </time>
           </span>
@@ -387,28 +387,28 @@
 <p>我们新建一个项目来说明怎么做，项目的名字叫<code>MultiTargetPrj</code>。</p>
 <p>Xcode默认给我们创建了两个Target，一个是<code>MultiTargetPrj</code>，另一个是<code>MultiTargetPrjTests</code>。<code>MultiTargetPrjTests</code>是单元测试的Target，我们暂且忽略。</p>
 <p>我们用<code>MultiTargetPrj</code>作为正式版，在此基础上我们新建一个Target来做开发版应用。如下图，在已有的<code>MultiTargetPrj</code> Target上点击右键，在菜单中选择<code>Duplicate</code>。</p>
-<p><img src="http://cdn.up4dev.com/multitarget/duplicate0.png" alt="复制targer0"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate0.png" alt="复制targer0"></p>
 <p>这样Xcode就为我们创建了一个名为<code>MultiTargetPrj copy</code>的Target，如下图</p>
-<p><img src="http://cdn.up4dev.com/multitarget/duplicate1.png" alt="复制targer1"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate1.png" alt="复制targer1"></p>
 <p>后边带个<code>copy</code>尾巴的名字太不优雅了，让我们重命名一下，要重命名的地方不少，我们还是直接看图吧：</p>
-<p><img src="http://cdn.up4dev.com/multitarget/rename0.png" alt="重命名0"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename0.png" alt="重命名0"></p>
 <p>然后重命名Schemes：</p>
-<p><img src="http://cdn.up4dev.com/multitarget/rename1.png" alt="重命名1"></p>
-<p><img src="http://cdn.up4dev.com/multitarget/rename2.png" alt="重命名2"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename1.png" alt="重命名1"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename2.png" alt="重命名2"></p>
 <p>最后然我们编辑一下info.plist，让应用在屏幕上显示的名字各不相同，正式版叫MT，开发版叫MT Dev，如下图所示：</p>
-<p><img src="http://cdn.up4dev.com/multitarget/display0.png" alt="显示名0"></p>
-<p><img src="http://cdn.up4dev.com/multitarget/display0.png" alt="显示名1"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png" alt="显示名0"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png" alt="显示名1"></p>
 <p>我们在界面上放置一个label，预期在运行正式版的应用时，显示<code>正式版</code>，测试版的应用时，显示<code>开发版</code>。</p>
-<p><img src="http://cdn.up4dev.com/multitarget/xib.png" alt="xib"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/xib.png" alt="xib"></p>
 <p>为了让程序可以区分正式版和测试版，我们给开发版的target中设置一个预定义宏<code>MULTITARGET_DEV</code>:</p>
-<p><img src="http://cdn.up4dev.com/multitarget/macro.png" alt="设置预定义宏"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/macro.png" alt="设置预定义宏"></p>
 <p>然后我们用一段代码来区分版本，设置不同的版本的文字：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></div><div class="line"><span class="meta">#ifndef MULTITARGET_DEV</span></div><div class="line">    <span class="keyword">self</span>.label.text = <span class="string">@"正式版"</span>;</div><div class="line"><span class="meta">#else</span></div><div class="line">    <span class="keyword">self</span>.label.text = <span class="string">@"开发版"</span>;</div><div class="line"><span class="meta">#endif</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>分别运行一次两个Target，我们看到的主屏是这样的：</p>
-<p><img src="http://cdn.up4dev.com/multitarget/home.png" alt="主屏"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/home.png" alt="主屏"></p>
 <p>两个Target的运行结果是这个样子的：</p>
-<p><img src="http://cdn.up4dev.com/multitarget/run0.png" alt="正式版截图"></p>
-<p><img src="http://cdn.up4dev.com/multitarget/run1.png" alt="测试版截图"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run0.png" alt="正式版截图"></p>
+<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run1.png" alt="测试版截图"></p>
 <p>我把这个测试程序的代码放到了GitHub: <a href="https://github.com/andyzhshg/MultiTarget" target="_blank" rel="external">andyzhshg/MultiTarget</a></p>
 
       
