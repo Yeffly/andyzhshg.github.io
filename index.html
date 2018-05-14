@@ -368,31 +368,12 @@
 
       
         
-          
-            <p><code>github</code> 还没有被墙，但是 <code>github</code> 很慢（至少我家的北京电信宽带下情况是这样）。终于忍受不了<code>github</code> 10~50 KB 的下载速度，我在网上找了下设置代理的方法，让 <code>git</code> 命令可以通过 <code>ss</code> 代理拉取 <code>github</code> 的代码。</p>
-<p>我们从 <code>clone</code> 一个全新的项目开始。</p>
-<blockquote>
-<p>这里其实是针对特定项目设置代理的方法，其实也可以设置全局的代理，这样每个项目就跟不设置代理时一样操作就可以了，我不想每个项目都走代理（因为我有一些不托管在 <code>github</code> 的项目），所以才会分开设置。设置全局代理的方法，可以参考我在文末给出的参考链接。</p>
-</blockquote>
-<h2 id="1-构建项目目录"><a href="#1-构建项目目录" class="headerlink" title="1. 构建项目目录"></a>1. 构建项目目录</h2><p>一般情况下，我们克隆一个项目都是直接通过 <code>git clone</code> 命令，像这样：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git@github.com:YourName/YourRepo.git</div></pre></td></tr></table></figure>
-<p>或者这样</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/YourName/YourRepo.git</div></pre></td></tr></table></figure>
-<p><code>git clone</code>命令会创建一个目录并将项目的代码数据拉取到这个目录中，这样的话我们还没有机会给项目设置代理，就已经开始从网络获取数据了。所以这里我将这个步骤做了一下分解。</p>
-<p>我们通过下边的步骤来初始化项目</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 首先创建一个空的项目目录</span></div><div class="line">mkdir YourRepo</div><div class="line"><span class="built_in">cd</span> YourRepo</div><div class="line"><span class="comment"># 初始化git环境</span></div><div class="line">git init</div><div class="line"><span class="comment"># 添加远端分支</span></div><div class="line">git remote add master git@github.com:YourName/YourRepo.git</div><div class="line"><span class="comment"># 或者</span></div><div class="line">git remote add master https://github.com/YourName/YourRepo.git</div></pre></td></tr></table></figure>
-<p>这样我们就初始化好了一个项目，下一步我们将为这个项目设置 <code>ss</code> 代理。</p>
-<h2 id="2-设置-ss-代理"><a href="#2-设置-ss-代理" class="headerlink" title="2. 设置 ss 代理"></a>2. 设置 <code>ss</code> 代理</h2><p>设置代理的方式很简单就一条命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config http.proxy <span class="string">'socks5://127.0.0.1:1080'</span></div></pre></td></tr></table></figure>
-<p>上面对应的是通过http协议的方法，对应git协议，通过下边的命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config core.gitProxy  <span class="string">'socks5://127.0.0.1:1080'</span></div></pre></td></tr></table></figure>
-<h2 id="3-拉取代码"><a href="#3-拉取代码" class="headerlink" title="3. 拉取代码"></a>3. 拉取代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git pull</div></pre></td></tr></table></figure>
-<p>到这里基本上就讲完了，如果是一个已经存在的项目，之前没有走代理，现在想走代理，那么其实更简单，略过第1步，从第2步开始即可。</p>
-<blockquote>
-<p>如果是新建项目，执行完 <code>git pull</code> 后可能发现目录是空的，这是因为项目此时没有在任何一个指定的分支下，只要执行形如 <code>git checkout master</code> 命令来把项目切到一个分支即可。</p>
-</blockquote>
-
-          
+          <p><code>github</code> 还没有被墙，但是 <code>github</code> 很慢（至少我家的北京电信宽带下情况是这样）。终于忍受不了<code>github</code> 10~50 KB 的下载速度，我在网上找了下设置代理的方法，让 <code>git</code> 命令可以通过 <code>ss</code> 代理拉取 <code>github</code> 的代码。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/05/14/github-use-ss/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
