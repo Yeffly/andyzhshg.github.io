@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="区块链, blockchain, C++, iOS, server, p2p" />
+  <meta name="keywords" content="NAS,HTTPS,Let's Encrypt,群晖,泛域名,acme," />
 
 
 
@@ -86,12 +86,29 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="UP4DEV">
-<meta property="og:url" content="http://www.up4dev.com/archives/index.html">
+<meta name="description" content="去年曾经写过一篇文章介绍如何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似*.domain.com的单一证书，就可以适配abc.domain.com，xyz.domain.com这类的子域名，而不需要单独为每个子域名申请证书了。 Neilpang/acme">
+<meta name="keywords" content="NAS,HTTPS,Let&#39;s Encrypt,群晖,泛域名,acme">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群晖 Let&#39;s Encrypt 泛域名证书自动更新">
+<meta property="og:url" content="http://www.up4dev.com/2018/05/29/synology-ssl-wildcard-cert-update/index.html">
 <meta property="og:site_name" content="UP4DEV">
+<meta property="og:description" content="去年曾经写过一篇文章介绍如何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似*.domain.com的单一证书，就可以适配abc.domain.com，xyz.domain.com这类的子域名，而不需要单独为每个子域名申请证书了。 Neilpang/acme">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/cert-list.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/unzip.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/config.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/apikey.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/file-info.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/file-path.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-name.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-inv.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-cmd.png">
+<meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-run.png">
+<meta property="og:updated_time" content="2018-05-30T07:36:57.293Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UP4DEV">
+<meta name="twitter:title" content="群晖 Let&#39;s Encrypt 泛域名证书自动更新">
+<meta name="twitter:description" content="去年曾经写过一篇文章介绍如何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似*.domain.com的单一证书，就可以适配abc.domain.com，xyz.domain.com这类的子域名，而不需要单独为每个子域名申请证书了。 Neilpang/acme">
+<meta name="twitter:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/cert-list.png">
 
 
 
@@ -112,10 +129,10 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/archives/"/>
+  <link rel="canonical" href="http://www.up4dev.com/2018/05/29/synology-ssl-wildcard-cert-update/"/>
 
 
-  <title> 归档 | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 群晖 Let's Encrypt 泛域名证书自动更新 | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -154,7 +171,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -275,413 +292,198 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 14 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/29/synology-ssl-wildcard-cert-update/" itemprop="url">
-              
-                <span itemprop="name">群晖 Let's Encrypt 泛域名证书自动更新</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-29T18:00:00+08:00"
-              content="2018-05-29" >
-          05-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/14/github-use-ss/" itemprop="url">
-              
-                <span itemprop="name">如何让git命令通过ss拉取github代码</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-14T22:26:00+08:00"
-              content="2018-05-14" >
-          05-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/10/install-vmm-on-ds716/" itemprop="url">
-              
-                <span itemprop="name">在群晖 DS716+II 上安装 VMM(Virtual Machine Manager)</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-10T13:12:00+08:00"
-              content="2018-05-10" >
-          05-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/05/git-multi-ssh-key/" itemprop="url">
-              
-                <span itemprop="name">管理多个github账号的 ssh key</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-05T16:14:00+08:00"
-              content="2018-05-05" >
-          05-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/11/synology-ssl-cert-update/" itemprop="url">
-              
-                <span itemprop="name">群晖 Let's Encrypt 证书的自动更新</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-11T18:00:00+08:00"
-              content="2017-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/06/12/git-commit-info-specify/" itemprop="url">
-              
-                <span itemprop="name">git commit 时指定时间和作者等信息</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-06-12T14:32:00+08:00"
-              content="2017-06-12" >
-          06-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/01/09/bitcoin-code-review-plan/" itemprop="url">
-              
-                <span itemprop="name">比特币源码分析写作计划</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-01-09T15:02:00+08:00"
-              content="2017-01-09" >
-          01-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/10/19/cpp11-shared_ptr/" itemprop="url">
-              
-                <span itemprop="name">C++11的智能指针(2) shared_ptr</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-10-19T23:17:00+08:00"
-              content="2016-10-19" >
-          10-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/10/15/vmware-fusion-static-ip/" itemprop="url">
-              
-                <span itemprop="name">给VMWare Fusion设置固定IP</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-10-15T14:36:00+08:00"
-              content="2016-10-15" >
-          10-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
-              
-                <span itemprop="name">用network create解决Docker容器互相连接的问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-10-09T20:00:00+08:00"
-              content="2016-10-09" >
-          10-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                群晖 Let's Encrypt 泛域名证书自动更新
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-29T18:00:00+08:00" content="2018-05-29">
+              2018-05-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/29/synology-ssl-wildcard-cert-update/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/29/synology-ssl-wildcard-cert-update/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
 
 
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>去年曾经写过一篇文章介绍如<a href="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/">何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书</a>。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似<code>*.domain.com</code>的单一证书，就可以适配<code>abc.domain.com</code>，<code>xyz.domain.com</code>这类的子域名，而不需要单独为每个子域名申请证书了。</p>
+<p><a href="https://github.com/Neilpang/acme.sh" target="_blank" rel="external"><strong>Neilpang/acme.sh</strong></a> 工具很快就支持新的协议了，我这篇文章就是在这个工具的基础上，实现泛域名的自动更新。为了减少复杂度，我编写了一个一键更新的懒人脚本，来帮助不愿意了解原理的同学快速部署。</p>
+<a id="more"></a>
+<h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h2><p>因为我介绍的方法是一键替换群晖的默认证书，所以，为了防止意外，最好保证你的证书列表里只有一条记录，即默认证书那一条。实际上因为支持了泛域名证书，基本上这一条记录就足够用了（当然，如果你要管理多个域名，可能本文的方法并不实用）。所以开始工作前你的证书列表大概应该是这个样子：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/cert-list.png" alt=""></p>
+<h2 id="2-下载一键更新脚本"><a href="#2-下载一键更新脚本" class="headerlink" title="2.  下载一键更新脚本"></a>2.  下载一键更新脚本</h2><p>这是一键脚本的项目地址：<a href="https://github.com/andyzhshg/syno-acme" target="_blank" rel="external">andyzhshg/syno-acme</a>。</p>
+<p>如果你对项目本身不感兴趣，可以直接下载打包好的工具：<a href="https://github.com/andyzhshg/syno-acme/archive/v0.1.1.zip" target="_blank" rel="external">syno-acme v0.1.1</a>。</p>
+<p>可以通过 File Station 将下载的工具上传到NAS的任意目录下，并解压。</p>
+<p>解压后大概是这个样子：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/unzip.png" alt="解压"></p>
+<h2 id="3-配置脚本参数"><a href="#3-配置脚本参数" class="headerlink" title="3. 配置脚本参数"></a>3. 配置脚本参数</h2><p>编辑脚本的配置文件<code>config</code>:</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/config.png" alt="配置"></p>
+<p>如图所示，需要编辑的几个字段我用蓝框标记出来了。</p>
+<p>首先是DOMAIN，也就是你的域名。</p>
+<p>然后是DNS的类型，根据服务商的不同，DNS类型各不相同，比如阿里云（dns_ali），Dnspod（dns_dp），Godaddy（dns_gd）等。</p>
+<p>最后要根据不同的服务商配置服务上提供的授权密钥等信息，比如我的域名服务商是阿里云，我需要编辑<code>Ali_Key</code>和<code>Ali_Secret</code>字段，字段的内容需要到域名服务商的管理后台来查看，因为不同的服务商的查看方式不同，请大家根据自己的实际情况去查找吧。</p>
+<p>需要指出的是，我给出的配置文件模板并没有给出所有acme.sh支持的域名服务商，大家可以参照 <a href="https://github.com/Neilpang/acme.sh/tree/master/dnsapi" target="_blank" rel="external">https://github.com/Neilpang/acme.sh/tree/master/dnsapi</a>来添加自己的配置。一般情况下，这个页面每个文件对应一个域名服务商，比如<code>dns_ali.sh</code>就是对应阿里云，文件名去掉<code>.sh</code>扩展名就是DNS类型，比如阿里云的DNS类型就是<code>dns_ali</code>。打开对应文件， 一般都可以在文件的头部找到需要设置的授权信息对应的密钥，比如阿里云的授权密钥所在的位置如下图所示：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/apikey.png" alt="APIKEY"></p>
+<p><code>config</code>模板中没有的服务商，请大家自行完善。</p>
+<h2 id="4-配置定时任务"><a href="#4-配置定时任务" class="headerlink" title="4. 配置定时任务"></a>4. 配置定时任务</h2><h3 id="i-查找脚本路径"><a href="#i-查找脚本路径" class="headerlink" title="i. 查找脚本路径"></a>i. 查找脚本路径</h3><p>在 File Station 中定位到下载的一键脚本的目录，查看该脚本的绝对路径：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/file-info.png" alt=""></p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/file-path.png" alt=""></p>
+<p>复制完整的绝对路径到剪贴板。</p>
+<h3 id="ii-创建定时任务"><a href="#ii-创建定时任务" class="headerlink" title="ii. 创建定时任务"></a>ii. 创建定时任务</h3><p>打开 <code>控制面板 / 任务计划 / 新增 / 计划的任务 / 用户自定义的脚本</code>：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task.png" alt=""></p>
+<p>设置任务名称和操作用户，需要注意的是这里一定要选择<code>root</code>：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-name.png" alt=""></p>
+<p>设置计划的时间和周期，这里只支持按月或者年重复，我们只能取按月重复才能满足 Let’s Encrypt 至少3个月更新一次的要求：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-inv.png" alt=""></p>
+<p>设置执行脚本，这里我们将脚本的输出重定向到了一个<code>log.txt</code>的文件中，以方便后期查看脚本的执行情况：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-cmd.png" alt=""></p>
+<p>上图红框中的脚本命令为(注意没有换行)：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/volume1/nas_share/certs/syno-acme/cert-up.sh &gt;&gt; /volume1/nas_share/certs/syno-acme/log.txt 2&gt;&amp;1</div></pre></td></tr></table></figure>
+<p>具体的路径是步骤 <code>i</code>中复制的路径。</p>
+<h3 id="iii-试运行脚本"><a href="#iii-试运行脚本" class="headerlink" title="iii. 试运行脚本"></a>iii. 试运行脚本</h3><p>可以在新建的任务上点击右键立即执行任务：</p>
+<p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-run.png" alt=""></p>
+<p>这样脚本就会运行，自动更新证书，并重启web服务器加载新的脚本。以后，NAS会每隔一个月执行一次该脚本，自动更新证书。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个一键脚本的特点是最小限度的触碰系统文件，仅<code>/usr/syno/etc/certificate/_archive</code>目录会被更改。<code>acme.sh</code>工具随用随时下载，保持最新，用完即删除，不占用磁盘空间。</p>
+<p>这基本就是本文的全部了，如果大家使用中遇到问题，可以在这里留言或者到 <a href="https://github.com/andyzhshg/syno-acme/issues" target="_blank" rel="external">https://github.com/andyzhshg/syno-acme/issues</a> 提issue。</p>
+<hr>
+<p>[^参考1]: <a href="https://github.com/Neilpang/acme.sh/wiki/Synology-NAS-Guide" target="_blank" rel="external">Synology NAS Guide</a><br>[^参考2]: <a href="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/">群晖 Let’s Encrypt 证书的自动更新</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NAS/" rel="tag">#NAS</a>
+          
+            <a href="/tags/HTTPS/" rel="tag">#HTTPS</a>
+          
+            <a href="/tags/Let-s-Encrypt/" rel="tag">#Let's Encrypt</a>
+          
+            <a href="/tags/群晖/" rel="tag">#群晖</a>
+          
+            <a href="/tags/泛域名/" rel="tag">#泛域名</a>
+          
+            <a href="/tags/acme/" rel="tag">#acme</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/14/github-use-ss/" rel="next" title="如何让git命令通过ss拉取github代码">
+                <i class="fa fa-chevron-left"></i> 如何让git命令通过ss拉取github代码
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -689,6 +491,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -708,8 +521,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://up4dev.oss-cn-qingdao.aliyuncs.com/up.jpg"
@@ -779,6 +601,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-准备工作"><span class="nav-number">1.</span> <span class="nav-text">1. 准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-下载一键更新脚本"><span class="nav-number">2.</span> <span class="nav-text">2.  下载一键更新脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置脚本参数"><span class="nav-number">3.</span> <span class="nav-text">3. 配置脚本参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-配置定时任务"><span class="nav-number">4.</span> <span class="nav-text">4. 配置定时任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#i-查找脚本路径"><span class="nav-number">4.1.</span> <span class="nav-text">i. 查找脚本路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ii-创建定时任务"><span class="nav-number">4.2.</span> <span class="nav-text">ii. 创建定时任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iii-试运行脚本"><span class="nav-number">4.3.</span> <span class="nav-text">iii. 试运行脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -875,11 +708,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5"></script>
+
 
 
   
@@ -897,9 +728,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = 'archives/index.html';
-      var disqus_title = "";
-      var disqus_url = '';
+      var disqus_identifier = '2018/05/29/synology-ssl-wildcard-cert-update/';
+      var disqus_title = "群晖 Let\'s Encrypt 泛域名证书自动更新";
+      var disqus_url = 'http://www.up4dev.com/2018/05/29/synology-ssl-wildcard-cert-update/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
@@ -910,6 +741,13 @@
       }
 
       run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
       
     </script>
   
