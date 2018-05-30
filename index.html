@@ -299,6 +299,129 @@
             
               
                 
+                <a class="post-title-link" href="/2019/05/29/synology-ssl-wildcard-cert-update/" itemprop="url">
+                  群晖 Let's Encrypt 泛域名证书自动更新
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-05-29T18:00:00+08:00" content="2019-05-29">
+              2019-05-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/05/29/synology-ssl-wildcard-cert-update/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/29/synology-ssl-wildcard-cert-update/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>去年曾经写过一篇文章介绍如<a href="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/">何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书</a>。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似<code>*.domain.com</code>的单一证书，就可以适配<code>abc.domain.com</code>，<code>xyz.domain.com</code>这类的子域名，而不需要单独为每个子域名申请证书了。</p>
+<p><a href="https://github.com/Neilpang/acme.sh" target="_blank" rel="external"><strong>Neilpang/acme.sh</strong></a> 工具很快就支持新的协议了，我这篇文章就是在这个工具的基础上，实现泛域名的自动更新。为了减少复杂度，我编写了一个一键更新的懒人脚本，来帮助不愿意了解原理的同学快速部署。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/05/29/synology-ssl-wildcard-cert-update/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/05/14/github-use-ss/" itemprop="url">
                   如何让git命令通过ss拉取github代码
                 </a>
@@ -1401,134 +1524,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/09/cpp11-unique_ptr/" itemprop="url">
-                  C++11的智能指针(1) unique_ptr
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-09T20:00:00+08:00" content="2016-10-09">
-              2016-10-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/技术/" itemprop="url" rel="index">
-                    <span itemprop="name">技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/09/cpp11-unique_ptr/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/cpp11-unique_ptr/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>C++11新引入了几种智能指针：<code>unique_ptr</code>，<code>shared_ptr</code>和<code>weak_ptr</code>，而原来的<code>auto_ptr</code>被弃用。</p>
-<p>我会写几篇文章分别来介绍这几种智能指针的用法，本篇主要介绍<code>unique_ptr</code>。</p>
-<p>主要介绍<code>unique_ptr</code>的两个主要特性:</p>
-<ol>
-<li>保存对象的指针，当<code>unique_ptr</code>本身释放的时候，自动调用对象的析构函数。</li>
-<li>唯一拥有它指向的对象，无法通过拷贝构造或者等号进行赋值。</li>
-</ol>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/09/cpp11-unique_ptr/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1574,7 +1569,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1591,7 +1586,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
