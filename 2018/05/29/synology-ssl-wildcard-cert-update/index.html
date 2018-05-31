@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="NAS,HTTPS,Let's Encrypt,群晖,泛域名,acme," />
+  <meta name="keywords" content="NAS,HTTPS,Let's Encrypt,群晖,泛域名,acme,Synology,SSL," />
 
 
 
@@ -87,7 +87,7 @@
 
 
 <meta name="description" content="去年曾经写过一篇文章介绍如何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似*.domain.com的单一证书，就可以适配abc.domain.com，xyz.domain.com这类的子域名，而不需要单独为每个子域名申请证书了。 Neilpang/acme">
-<meta name="keywords" content="NAS,HTTPS,Let&#39;s Encrypt,群晖,泛域名,acme">
+<meta name="keywords" content="NAS,HTTPS,Let&#39;s Encrypt,群晖,泛域名,acme,Synology,SSL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="群晖 Let&#39;s Encrypt 泛域名证书自动更新">
 <meta property="og:url" content="http://www.up4dev.com/2018/05/29/synology-ssl-wildcard-cert-update/index.html">
@@ -104,7 +104,7 @@
 <meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-inv.png">
 <meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-cmd.png">
 <meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-run.png">
-<meta property="og:updated_time" content="2018-05-30T07:36:57.293Z">
+<meta property="og:updated_time" content="2018-05-31T10:14:26.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="群晖 Let&#39;s Encrypt 泛域名证书自动更新">
 <meta name="twitter:description" content="去年曾经写过一篇文章介绍如何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似*.domain.com的单一证书，就可以适配abc.domain.com，xyz.domain.com这类的子域名，而不需要单独为每个子域名申请证书了。 Neilpang/acme">
@@ -390,7 +390,7 @@
 <h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h2><p>因为我介绍的方法是一键替换群晖的默认证书，所以，为了防止意外，最好保证你的证书列表里只有一条记录，即默认证书那一条。实际上因为支持了泛域名证书，基本上这一条记录就足够用了（当然，如果你要管理多个域名，可能本文的方法并不实用）。所以开始工作前你的证书列表大概应该是这个样子：</p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/cert-list.png" alt=""></p>
 <h2 id="2-下载一键更新脚本"><a href="#2-下载一键更新脚本" class="headerlink" title="2.  下载一键更新脚本"></a>2.  下载一键更新脚本</h2><p>这是一键脚本的项目地址：<a href="https://github.com/andyzhshg/syno-acme" target="_blank" rel="external">andyzhshg/syno-acme</a>。</p>
-<p>如果你对项目本身不感兴趣，可以直接下载打包好的工具：<a href="https://github.com/andyzhshg/syno-acme/archive/v0.1.1.zip" target="_blank" rel="external">syno-acme v0.1.1</a>。</p>
+<p>如果你对项目本身不感兴趣，可以直接下载打包好的工具：<a href="https://github.com/andyzhshg/syno-acme/archive/v0.1.2.zip" target="_blank" rel="external">syno-acme v0.1.2</a>。</p>
 <p>可以通过 File Station 将下载的工具上传到NAS的任意目录下，并解压。</p>
 <p>解压后大概是这个样子：</p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/unzip.png" alt="解压"></p>
@@ -403,6 +403,7 @@
 <p>需要指出的是，我给出的配置文件模板并没有给出所有acme.sh支持的域名服务商，大家可以参照 <a href="https://github.com/Neilpang/acme.sh/tree/master/dnsapi" target="_blank" rel="external">https://github.com/Neilpang/acme.sh/tree/master/dnsapi</a>来添加自己的配置。一般情况下，这个页面每个文件对应一个域名服务商，比如<code>dns_ali.sh</code>就是对应阿里云，文件名去掉<code>.sh</code>扩展名就是DNS类型，比如阿里云的DNS类型就是<code>dns_ali</code>。打开对应文件， 一般都可以在文件的头部找到需要设置的授权信息对应的密钥，比如阿里云的授权密钥所在的位置如下图所示：</p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/apikey.png" alt="APIKEY"></p>
 <p><code>config</code>模板中没有的服务商，请大家自行完善。</p>
+<p>[^2018.05.31]: 针对评论区同学提出的 Linode 的 API 生效时间的问题，增加了一个配置参数<code>DNS_SLEEP</code>，出现类似问题的话可以通过修改增大这个参数来解决。</p>
 <h2 id="4-配置定时任务"><a href="#4-配置定时任务" class="headerlink" title="4. 配置定时任务"></a>4. 配置定时任务</h2><h3 id="i-查找脚本路径"><a href="#i-查找脚本路径" class="headerlink" title="i. 查找脚本路径"></a>i. 查找脚本路径</h3><p>在 File Station 中定位到下载的一键脚本的目录，查看该脚本的绝对路径：</p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/file-info.png" alt=""></p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/file-path.png" alt=""></p>
@@ -458,6 +459,10 @@
             <a href="/tags/泛域名/" rel="tag">#泛域名</a>
           
             <a href="/tags/acme/" rel="tag">#acme</a>
+          
+            <a href="/tags/Synology/" rel="tag">#Synology</a>
+          
+            <a href="/tags/SSL/" rel="tag">#SSL</a>
           
         </div>
       
@@ -564,7 +569,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
