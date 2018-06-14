@@ -1422,8 +1422,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
-                  用network create解决Docker容器互相连接的问题
+                <a class="post-title-link" href="/2016/10/09/cpp11-unique_ptr/" itemprop="url">
+                  C++11的智能指针(1) unique_ptr
                 </a>
               
             
@@ -1466,8 +1466,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/10/09/docker-network-create/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/docker-network-create/" itemprop="commentsCount"></span>
+                <a href="/2016/10/09/cpp11-unique_ptr/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/cpp11-unique_ptr/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1491,10 +1491,15 @@
 
       
         
-          <p>目前在做一个P2P的程序，为了方便测试和部署，我们用<code>docker</code>来运行相同的程序实例。</p>
-<p>作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头…</p>
+          <p>C++11新引入了几种智能指针：<code>unique_ptr</code>，<code>shared_ptr</code>和<code>weak_ptr</code>，而原来的<code>auto_ptr</code>被弃用。</p>
+<p>我会写几篇文章分别来介绍这几种智能指针的用法，本篇主要介绍<code>unique_ptr</code>。</p>
+<p>主要介绍<code>unique_ptr</code>的两个主要特性:</p>
+<ol>
+<li>保存对象的指针，当<code>unique_ptr</code>本身释放的时候，自动调用对象的析构函数。</li>
+<li>唯一拥有它指向的对象，无法通过拷贝构造或者等号进行赋值。</li>
+</ol>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/09/docker-network-create/#more" rel="contents">
+            <a class="btn" href="/2016/10/09/cpp11-unique_ptr/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
