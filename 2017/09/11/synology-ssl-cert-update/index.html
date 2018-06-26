@@ -93,7 +93,7 @@
 <meta property="og:url" content="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/index.html">
 <meta property="og:site_name" content="UP4DEV">
 <meta property="og:description" content="去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。 不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s">
-<meta property="og:updated_time" content="2018-06-14T10:57:17.246Z">
+<meta property="og:updated_time" content="2018-06-26T11:14:08.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="群晖 Let&#39;s Encrypt 证书的自动更新">
 <meta name="twitter:description" content="去年入手了一个群晖的 NAS DS716+II，这玩意儿可以说是垂涎了好久，最后忍不住诱惑，终于是入手了。选了716+II这个盘位少但价格不便宜的家伙说白了就是为了一件事——docker。有了docker，可以说就有了无限的可能性，可以随便折腾，不用担心犯错误把NAS的主系统给搞乱了。 不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s">
@@ -376,7 +376,7 @@
 <p>不过今天这篇文章我不打算介绍NAS，也不打算说怎么在上边用docker，我只想说说在这个上边怎么使用Let’s Encrypt的证书，以及怎么自动更新证书。</p>
 <a id="more"></a>
 <blockquote>
-<p>[2018.05] 这篇文章提供的方案已经过时，请参考我的良一篇文章：<a href="http://www.up4dev.com/2018/05/29/synology-ssl-wildcard-cert-update/">群晖 Let’s Encrypt 泛域名证书自动更新</a></p>
+<p>[2018.05] 这篇文章提供的方案已经过时，请参考我的另一篇文章：<a href="http://www.up4dev.com/2018/05/29/synology-ssl-wildcard-cert-update/">群晖 Let’s Encrypt 泛域名证书自动更新</a></p>
 </blockquote>
 <p>如果说你幸福的生活在一个运营商没有封80端口的国度，那么这篇文章你就不必往下看了，因为群晖的证书管理本身就内置了Let’s Encrypt的证书管理方式。我之所以写这篇文章，是因为我家的网络是没有开放80端口的，所以群晖自带的管理工具永远都是告诉你<code>“无法连接到 Let&#39;s Encrypt。请确认域名有效。”</code></p>
 <p>好在Let’s Encrypt提供了acme协议的认证方式，可以在没有80端口的情形下来签发和更新证书。</p>
