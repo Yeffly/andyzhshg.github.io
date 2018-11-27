@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push">
+<meta name="description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。">
 <meta name="keywords" content="技术,docker,ci,jenkins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用安装在 Docker 中的 jenkins 运行 Docker 任务">
 <meta property="og:url" content="http://www.up4dev.com/2018/11/27/run-docker-by-jenkins-in-docker/index.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push">
-<meta property="og:updated_time" content="2018-11-27T05:28:50.149Z">
+<meta property="og:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。">
+<meta property="og:updated_time" content="2018-11-27T05:32:32.205Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用安装在 Docker 中的 jenkins 运行 Docker 任务">
-<meta name="twitter:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push">
+<meta name="twitter:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。">
 
 
 
@@ -373,6 +373,7 @@
 
       
         <p>题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。</p>
+<a id="more"></a>
 <h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push 到 github 上。</p>
 <p>整体的流程实际上也不算复杂，但是作为一个程序员，总觉得会有更加智能和省事的方法（实际上就是不折腾不舒服而已）。</p>
 <p>所以我想构建一个系统，来达到博客的自动构建和发布的效果。鉴于这部分跟主题的关系不是特别大，还是不再赘述博客的事了，也许以后回写一篇博客自动构建的文章，这里就不展开了。</p>
