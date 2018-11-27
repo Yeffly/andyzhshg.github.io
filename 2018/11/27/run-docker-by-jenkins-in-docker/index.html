@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="区块链, blockchain, C++, iOS, server, p2p, BitCoin, EOS, NAS" />
+  <meta name="keywords" content="技术,docker,ci,jenkins," />
 
 
 
@@ -86,13 +86,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://www.up4dev.com/tags/index.html">
+<meta name="description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push">
+<meta name="keywords" content="技术,docker,ci,jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用安装在 Docker 中的 jenkins 运行 Docker 任务">
+<meta property="og:url" content="http://www.up4dev.com/2018/11/27/run-docker-by-jenkins-in-docker/index.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:updated_time" content="2018-05-08T18:16:01.011Z">
+<meta property="og:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push">
+<meta property="og:updated_time" content="2018-11-27T05:28:50.149Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="标签">
+<meta name="twitter:title" content="用安装在 Docker 中的 jenkins 运行 Docker 任务">
+<meta name="twitter:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push">
 
 
 
@@ -113,16 +117,10 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/tags/"/>
+  <link rel="canonical" href="http://www.up4dev.com/2018/11/27/run-docker-by-jenkins-in-docker/"/>
 
 
-  <title>
-  
-
-  
-    标签 | UP4DEV
-  
-</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 用安装在 Docker 中的 jenkins 运行 Docker 任务 | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -161,7 +159,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -284,16 +282,182 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
     
-      <div class="tag-cloud">
-        <div class="tag-cloud-title">
-            目前共计 34 个标签
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                用安装在 Docker 中的 jenkins 运行 Docker 任务
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-11-27T03:57:00+00:00" content="2018-11-27">
+              2018-11-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/11/27/run-docker-by-jenkins-in-docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/27/run-docker-by-jenkins-in-docker/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
         </div>
-        <div class="tag-cloud-tags">
-          <a href="/tags/BitCoin/" style="font-size: 12px; color: #ccc">BitCoin</a> <a href="/tags/C/" style="font-size: 26.4px; color: #363636">C++</a> <a href="/tags/C-0x/" style="font-size: 15.6px; color: #a7a7a7">C++0x</a> <a href="/tags/EOS/" style="font-size: 15.6px; color: #a7a7a7">EOS</a> <a href="/tags/HTTPS/" style="font-size: 15.6px; color: #a7a7a7">HTTPS</a> <a href="/tags/Let-s-Encrypt/" style="font-size: 15.6px; color: #a7a7a7">Let's Encrypt</a> <a href="/tags/NAS/" style="font-size: 19.2px; color: #818181">NAS</a> <a href="/tags/SSL/" style="font-size: 12px; color: #ccc">SSL</a> <a href="/tags/Synology/" style="font-size: 12px; color: #ccc">Synology</a> <a href="/tags/VMM/" style="font-size: 12px; color: #ccc">VMM</a> <a href="/tags/acme/" style="font-size: 12px; color: #ccc">acme</a> <a href="/tags/ci/" style="font-size: 12px; color: #ccc">ci</a> <a href="/tags/docker/" style="font-size: 15.6px; color: #a7a7a7">docker</a> <a href="/tags/git/" style="font-size: 22.8px; color: #5c5c5c">git</a> <a href="/tags/github/" style="font-size: 12px; color: #ccc">github</a> <a href="/tags/iOS/" style="font-size: 12px; color: #ccc">iOS</a> <a href="/tags/jenkins/" style="font-size: 12px; color: #ccc">jenkins</a> <a href="/tags/ss/" style="font-size: 12px; color: #ccc">ss</a> <a href="/tags/ssh/" style="font-size: 12px; color: #ccc">ssh</a> <a href="/tags/区块链/" style="font-size: 19.2px; color: #818181">区块链</a> <a href="/tags/后端/" style="font-size: 12px; color: #ccc">后端</a> <a href="/tags/工具/" style="font-size: 12px; color: #ccc">工具</a> <a href="/tags/库/" style="font-size: 12px; color: #ccc">库</a> <a href="/tags/技术/" style="font-size: 30px; color: #111">技术</a> <a href="/tags/插件/" style="font-size: 12px; color: #ccc">插件</a> <a href="/tags/智能合约/" style="font-size: 15.6px; color: #a7a7a7">智能合约</a> <a href="/tags/智能指针/" style="font-size: 15.6px; color: #a7a7a7">智能指针</a> <a href="/tags/比特币/" style="font-size: 12px; color: #ccc">比特币</a> <a href="/tags/泛域名/" style="font-size: 12px; color: #ccc">泛域名</a> <a href="/tags/牢骚/" style="font-size: 12px; color: #ccc">牢骚</a> <a href="/tags/算法/" style="font-size: 12px; color: #ccc">算法</a> <a href="/tags/群晖/" style="font-size: 15.6px; color: #a7a7a7">群晖</a> <a href="/tags/虚拟机/" style="font-size: 12px; color: #ccc">虚拟机</a> <a href="/tags/非技术/" style="font-size: 12px; color: #ccc">非技术</a>
-        </div>
-      </div>
+      </header>
     
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。</p>
+<h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push 到 github 上。</p>
+<p>整体的流程实际上也不算复杂，但是作为一个程序员，总觉得会有更加智能和省事的方法（实际上就是不折腾不舒服而已）。</p>
+<p>所以我想构建一个系统，来达到博客的自动构建和发布的效果。鉴于这部分跟主题的关系不是特别大，还是不再赘述博客的事了，也许以后回写一篇博客自动构建的文章，这里就不展开了。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>提到自动构建，很自然的想到了jenkins；然后恰好我有一台群晖的NAS，上边可以跑Docker，所以又很自然的想到了通过Docker来安装jenkins；有了jenkins，当然还要通过jenkins来运行自动化的任务，运行任务最简单且对NAS系统侵入最小的方式是通过Docker运行任务。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>上面的思路看似很顺畅，但是认真思考一下会发现，因为jenkins本身是运行在一个容器里的，所以我们在创建任务的时候给出的脚本或命令，都是在这个容器内运行的，这就出现了一个问题，这个容器内部是没有docker环境的，所以执行不了docker命令，也就是说，必须想办法来让这个容器内部可以执行docker任务。</p>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>经过一番搜索之后，我找到了了这篇文章：<a href="http://www.dockone.io/article/431" target="_blank" rel="external">在（Docker里的）Jenkins里运行Docker</a>。</p>
+<p>最终我选择了文中提到的<code>DooD（Docker-outside-of-Docker）</code>方案。</p>
+<p>也就是所想办法让jenkins容器可以执行宿主机上的docker命令。</p>
+<p>因为需要给予jenkins用户sudo权限，然而官方的镜像jenkins默认是没有sudo用户权限的，所以我在官方镜像的基础上新建了一个镜像，默认给jenkins用户sudo权限。</p>
+<p><a href="https://hub.docker.com/r/andyzhshg/jenkins/" target="_blank" rel="external">andyzhshg/jenkins</a></p>
+<p>改动的内容如下：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> jenkins:<span class="number">2.60</span>.<span class="number">3</span></div><div class="line"><span class="keyword">MAINTAINER</span> andyzhshg &lt;andyzhshg@gmail.com&gt;</div><div class="line"></div><div class="line"><span class="keyword">USER</span> root</div><div class="line"><span class="keyword">RUN</span><span class="bash"> apt-get update \</span></div><div class="line">  &amp;&amp; apt-get install -y sudo \</div><div class="line">  &amp;&amp; rm -rf /var/lib/apt/lists/*</div><div class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"jenkins ALL=NOPASSWD: ALL"</span> &gt;&gt; /etc/sudoers</span></div><div class="line"></div><div class="line"><span class="keyword">USER</span> jenkins</div></pre></td></tr></table></figure>
+<p>运行这个镜像的容器很简单：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker run <span class="_">-d</span> \</div><div class="line">	-v /var/run/docker.sock:/var/run/docker.sock \</div><div class="line">	-v $(<span class="built_in">which</span> docker):/usr/bin/docker </div><div class="line">	-p 8080:8080 \</div><div class="line">	andyzhshg/jenkins</div></pre></td></tr></table></figure>
+<p>需要重点关注带有<code>-v</code>参数的两行：</p>
+<p>第1行是将宿主机的<code>/var/run/docker.sock</code>映射到容器中，这样在容器中运行的docker命令，就会在宿主机上来执行。</p>
+<p>第2行是将宿主机的<code>docker</code>程序映射进容器中，这样本省没有安装docker的jenkins容器就可以执行docker命令了（事实上容器里是没有运行docker的服务的，我们只是用这个映射进容器的docker来作为客户端发送docker的指令到<code>/var/run/docker.sock</code>而已，儿<code>/var/run/docker.sock</code>已经被链接到宿主机了）。</p>
+<p>至此，我们的jenkins就准备就绪了。</p>
+<blockquote>
+<p>当然，通常情况下我们还需要把jenkins自身的数据目录链接到宿主机的目录中，以保证容器被销毁后还能够再启动新的数据而数据可以得到保留，这些可以参考jenkins官方镜像的说明。</p>
+<p>比如在<code>docker run</code>加上 <code>-v your_jenkins_data_path:/var/jenkins_home</code>参数。</p>
+</blockquote>
+<p>初始化jenkins的配置之后，我们就可以在jenkins上来新建一个自动化的构建项目了，比如我的blog自动构建项目的自动化脚本大概就是这个样子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"new blogs posted, begin auto build."</span></div><div class="line"></div><div class="line"><span class="comment"># 从gitlab拉取内容更新，构建并推送到github pages</span></div><div class="line">sudo docker run --rm -v /volume1/docker/blog/key/:/root/.ssh -v /volume1/docker/blog/up4dev:/blog andyzhshg/hexo</div><div class="line"></div><div class="line"><span class="comment"># 推送一份内容原文到github做备份</span></div><div class="line">sudo docker run --rm -v /volume1/docker/blog/key/:/root/.ssh -v /volume1/docker/blog/up4dev:/blog andyzhshg/hexo /blog/backup2github.sh </div><div class="line"></div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"auto build done."</span></div></pre></td></tr></table></figure>
+<p>这虽然是一个特例化的应用场景，但是其他的项目也大同小异，只要准备好docker的镜像，然后再jenkins执行<code>docker run</code>就可以了。</p>
+<p>需要注意的是，这里的<code>docker run</code>一定是要以sudo权限运行的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag">#技术</a>
+          
+            <a href="/tags/docker/" rel="tag">#docker</a>
+          
+            <a href="/tags/ci/" rel="tag">#ci</a>
+          
+            <a href="/tags/jenkins/" rel="tag">#jenkins</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/27/spdlog-tutorial/" rel="next" title="spdlog 简介">
+                <i class="fa fa-chevron-left"></i> spdlog 简介
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -302,6 +466,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -321,8 +496,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://up4dev.oss-cn-qingdao.aliyuncs.com/up.jpg"
@@ -392,6 +576,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缘起"><span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案"><span class="nav-text">方案</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -504,6 +699,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5"></script>
+
+
 
   
 
@@ -520,9 +719,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = 'tags/index.html';
-      var disqus_title = "标签";
-      var disqus_url = 'http://www.up4dev.com/tags/index.html';
+      var disqus_identifier = '2018/11/27/run-docker-by-jenkins-in-docker/';
+      var disqus_title = "用安装在 Docker 中的 jenkins 运行 Docker 任务";
+      var disqus_url = 'http://www.up4dev.com/2018/11/27/run-docker-by-jenkins-in-docker/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
@@ -533,6 +732,13 @@
       }
 
       run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
       
     </script>
   
