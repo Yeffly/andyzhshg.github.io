@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[罗技鼠标滚轮失灵的处理办法]]></title>
+    <url>%2F2018%2F12%2F24%2Flogintech-mouse-whele-not-working%2F</url>
+    <content type="text"><![CDATA[我一直在用罗技的一款鼠标 M720 Triathlon , 这款鼠标因为多了几个自定义键，可以设置对应mac触摸板的手势，我一直用的很开心。不过自从上周升级完 macOS Mojave 10.14.2 后突然发现鼠标的滚轮不能用了，包括滚动以及滚轮的左右波动，还有哪两颗自定义键。 因为升级系统的当天也同时升级了罗技的鼠标管理软件Logitech Options，我一度以为是罗技软件的问题，所以我尝试了降级Logitech Options，依然无果。最后将Logitech Options卸载掉了之后发现滚轮可以用了，但是自定义键依然不能用。 就这样别扭着用了好几天，并同时尝试联系罗技的客服，然而问题提交几天根本没有人回复，也是服了这客服了。后来实在是不心甘，有常识寻找解决办法，终于在罗技自己的论坛找到了遇到同样问题的用户提出的问题和解决办法： 点击左上角苹果图标 点击系统偏好设置 点击安全性与隐私 点击隐私标签页 点击左侧的辅助功能 点击Logitech Options Deamon(如果是灰掉的不能点就先点击左下角的锁图标解锁) 这时就发现滚轮生效了，而且可以通过Logitech Options来设置自定义键的功能了。 虽然可能是苹果系统升级引起的问题，但是问题出了这么久罗技官方也没有升级软件或者给出暂时解决办法，也是很不负责任。希望这篇文章能够被搜索引擎检索到，让碰到同样问题的人少些麻烦。 罗技，You are welcome! 很高兴帮你做客服…]]></content>
+      <categories>
+        <category>泛技术</category>
+      </categories>
+      <tags>
+        <tag>数码</tag>
+        <tag>泛技术</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[用安装在 Docker 中的 jenkins 运行 Docker 任务]]></title>
     <url>%2F2018%2F11%2F27%2Frun-docker-by-jenkins-in-docker%2F</url>
     <content type="text"><![CDATA[题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。 缘起故事的缘起是这个博客，他是基于 Github Pages 的，使用的过程就是用 MarkDown 写文章，通过 HEXO 系统来构建，然后 push 到 github 上。 整体的流程实际上也不算复杂，但是作为一个程序员，总觉得会有更加智能和省事的方法（实际上就是不折腾不舒服而已）。 所以我想构建一个系统，来达到博客的自动构建和发布的效果。鉴于这部分跟主题的关系不是特别大，还是不再赘述博客的事了，也许以后回写一篇博客自动构建的文章，这里就不展开了。 思路提到自动构建，很自然的想到了jenkins；然后恰好我有一台群晖的NAS，上边可以跑Docker，所以又很自然的想到了通过Docker来安装jenkins；有了jenkins，当然还要通过jenkins来运行自动化的任务，运行任务最简单且对NAS系统侵入最小的方式是通过Docker运行任务。 问题上面的思路看似很顺畅，但是认真思考一下会发现，因为jenkins本身是运行在一个容器里的，所以我们在创建任务的时候给出的脚本或命令，都是在这个容器内运行的，这就出现了一个问题，这个容器内部是没有docker环境的，所以执行不了docker命令，也就是说，必须想办法来让这个容器内部可以执行docker任务。 方案经过一番搜索之后，我找到了了这篇文章：在（Docker里的）Jenkins里运行Docker。 最终我选择了文中提到的DooD（Docker-outside-of-Docker）方案。 也就是所想办法让jenkins容器可以执行宿主机上的docker命令。 因为需要给予jenkins用户sudo权限，然而官方的镜像jenkins默认是没有sudo用户权限的，所以我在官方镜像的基础上新建了一个镜像，默认给jenkins用户sudo权限。 andyzhshg/jenkins 改动的内容如下： 12345678910FROM jenkins:2.60.3MAINTAINER andyzhshg &lt;andyzhshg@gmail.com&gt;USER rootRUN apt-get update \ &amp;&amp; apt-get install -y sudo \ &amp;&amp; rm -rf /var/lib/apt/lists/*RUN echo "jenkins ALL=NOPASSWD: ALL" &gt;&gt; /etc/sudoersUSER jenkins 运行这个镜像的容器很简单： 12345docker run -d \ -v /var/run/docker.sock:/var/run/docker.sock \ -v $(which docker):/usr/bin/docker -p 8080:8080 \ andyzhshg/jenkins 需要重点关注带有-v参数的两行： 第1行是将宿主机的/var/run/docker.sock映射到容器中，这样在容器中运行的docker命令，就会在宿主机上来执行。 第2行是将宿主机的docker程序映射进容器中，这样本省没有安装docker的jenkins容器就可以执行docker命令了（事实上容器里是没有运行docker的服务的，我们只是用这个映射进容器的docker来作为客户端发送docker的指令到/var/run/docker.sock而已，儿/var/run/docker.sock已经被链接到宿主机了）。 至此，我们的jenkins就准备就绪了。 当然，通常情况下我们还需要把jenkins自身的数据目录链接到宿主机的目录中，以保证容器被销毁后还能够再启动新的数据而数据可以得到保留，这些可以参考jenkins官方镜像的说明。 比如在docker run加上 -v your_jenkins_data_path:/var/jenkins_home参数。 初始化jenkins的配置之后，我们就可以在jenkins上来新建一个自动化的构建项目了，比如我的blog自动构建项目的自动化脚本大概就是这个样子： 12345678910echo "new blogs posted, begin auto build."# 从gitlab拉取内容更新，构建并推送到github pagessudo docker run --rm -v /volume1/docker/blog/key/:/root/.ssh -v /volume1/docker/blog/up4dev:/blog andyzhshg/hexo# 推送一份内容原文到github做备份sudo docker run --rm -v /volume1/docker/blog/key/:/root/.ssh -v /volume1/docker/blog/up4dev:/blog andyzhshg/hexo /blog/backup2github.sh echo "auto build done." 这虽然是一个特例化的应用场景，但是其他的项目也大同小异，只要准备好docker的镜像，然后再jenkins执行docker run就可以了。 需要注意的是，这里的docker run一定是要以sudo权限运行的。]]></content>
