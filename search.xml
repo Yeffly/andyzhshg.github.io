@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[mac的终端用ss做代理]]></title>
     <url>%2F2019%2F02%2F15%2Fmac-term-ss%2F</url>
-    <content type="text"><![CDATA[最近在研究golang，go提供了一个很好用的工具就是go get。go get本身不得不说是一个伟大的设计，极大地减轻了我们做包管理的负担，这个对于主要做C++的我的感受尤为明显。 但是在我们这个国家里，因为某些你懂得原因，顺利的用go get却成了一件很困难的事。之前写过一篇文章介绍如何让git走SS代理，但是go get还是与git的情况不是完全一致的。 google了一圈之后，我总结了一个更加通用的方法。 理论上这个方法可以让所有的终端的命令通过SS提供的socks5代理来访问网络。 方法很简单，就是在需要用代理的时候运行如下的命令： 1export all_proxy=socks5://127.0.0.1:1080 其中socks5://127.0.0.1:1080是SS提供的socks5代理服务的监听地址，可以在Shadowsocks的高级设置下找到。 如果想减少每次打开执行导入命令的麻烦，可以将导入语句加入到~/.bash_profile中。 参考：https://github.com/mrdulin/blog/issues/18 https://studygolang.com/articles/9490]]></content>
+    <content type="text"><![CDATA[最近在研究golang，go提供了一个很好用的工具就是go get。go get本身不得不说是一个伟大的设计，极大地减轻了我们做包管理的负担，这个对于主要做C++的我的感受尤为明显。 但是在我们这个国家里，因为某些你懂得原因，顺利的用go get却成了一件很困难的事。之前写过一篇文章介绍如何让git走SS代理，但是go get还是与git的情况不是完全一致的。 google了一圈之后，我总结了一个更加通用的方法。 理论上这个方法可以让所有的终端的命令通过SS提供的socks5代理来访问网络。 方法很简单，就是在需要用代理的时候运行如下的命令： 1export all_proxy=socks5://127.0.0.1:1080 其中socks5://127.0.0.1:1080是SS提供的socks5代理服务的监听地址，可以在Shadowsocks的高级设置下找到。 如果想减少每次打开执行导入命令的麻烦，可以将导入语句加入到~/.bash_profile中。 参考：https://github.com/mrdulin/blog/issues/18 https://studygolang.com/articles/9490 https://github.com/golang/go/wiki/GoGetProxyConfig]]></content>
       <categories>
         <category>泛技术</category>
       </categories>
