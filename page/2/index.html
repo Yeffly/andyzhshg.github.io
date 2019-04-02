@@ -299,6 +299,130 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/05/git-multi-ssh-key/" itemprop="url">
+                  管理多个github账号的 ssh key
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-05T16:14:00+08:00" content="2018-05-05">
+              2018-05-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/泛技术/" itemprop="url" rel="index">
+                    <span itemprop="name">泛技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/05/git-multi-ssh-key/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/05/git-multi-ssh-key/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>我们大多时候是通过<code>ssh key</code>的方式来进行<code>github</code>代码库的权限管理，如何生成一个<code>ssh key</code>以及如何在<code>github</code>设置网络上有各类的说明，不是本文的重点。本文要解决的是在一个机器上管理多个账号的方法。</p>
+<p>出于各种原因，有些人会有多个github账号，比如一个个人账号，一个工作账号。而github是不允许两个账号出现相同的SSH KEY的。那么问题来了，我们为了方便，往往都是用<code>ss-keygen</code>命令，一路默认参数在<code>~/.ssh</code>目录下生成一对名为<code>id_rsa</code>和<code>id_rsa.pub</code>的密钥，然后把<code>id_rsa.pub</code>贴到github的<code>SSH and GPG keys</code>设置中去。</p>
+<p>如何生成一个新的密钥给另一个账号，并且在使用的过程中尽量减少麻烦呢，我这里给出一种相对简便的方法。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/05/05/git-multi-ssh-key/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/09/11/synology-ssl-cert-update/" itemprop="url">
                   群晖 Let's Encrypt 证书的自动更新
                 </a>
@@ -928,129 +1052,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
-                  用network create解决Docker容器互相连接的问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-09T20:00:00+08:00" content="2016-10-09">
-              2016-10-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/泛技术/" itemprop="url" rel="index">
-                    <span itemprop="name">泛技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/09/docker-network-create/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/docker-network-create/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>目前在做一个P2P的程序，为了方便测试和部署，我们用<code>docker</code>来运行相同的程序实例。</p>
-<p>作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头…</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/09/docker-network-create/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/10/09/cpp11-unique_ptr/" itemprop="url">
                   C++11的智能指针(1) unique_ptr
                 </a>
@@ -1129,6 +1130,129 @@
 </ol>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/10/09/cpp11-unique_ptr/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
+                  用network create解决Docker容器互相连接的问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-09T20:00:00+08:00" content="2016-10-09">
+              2016-10-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/泛技术/" itemprop="url" rel="index">
+                    <span itemprop="name">泛技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/09/docker-network-create/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/docker-network-create/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>目前在做一个P2P的程序，为了方便测试和部署，我们用<code>docker</code>来运行相同的程序实例。</p>
+<p>作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头…</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/10/09/docker-network-create/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1405,135 +1529,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/07/new-start/" itemprop="url">
-                  新的开始
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-07T18:15:15+08:00" content="2015-09-07">
-              2015-09-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/杂/" itemprop="url" rel="index">
-                    <span itemprop="name">杂</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/07/new-start/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/09/07/new-start/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>人啊，信誓旦旦说一些事情的时候是一回事，但是真正坚持做下去，却是另一回事。</p>
-<p>写博客这件事，说了好几年，但是实际上这么多年下来，却几乎是没有写什么东西。</p>
-<p>计划主要还是写一些技术相关的东西，算下来工作已经6年有余了，学了很多东西，但都称不上精通。杂七杂八，学了不知道多少种技术，最终混成了一个杂学家，也是有些惭愧呢。开这个博客，主要还是想借这个契机，整理和消化一些自己的所学，给自己的技术历程一个简单的记录，如果能够帮到误打误撞看到这些文章的人，也算是锦上添花了。</p>
-<p>如果有闲情逸致呢，可能会把还能拿得出手的非技术的散文也发在这里，如果酸倒了诸位看客的牙齿，也非我故意，是你运气不好罢了。</p>
-<p>这篇文章叫新的开始，但愿这次开始，是真正的开始，并坚持下去。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1574,7 +1574,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1591,7 +1591,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
