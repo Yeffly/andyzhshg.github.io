@@ -93,7 +93,7 @@
 <meta property="og:url" content="http://www.up4dev.com/2018/11/27/run-docker-by-jenkins-in-docker/index.html">
 <meta property="og:site_name" content="UP4DEV">
 <meta property="og:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。">
-<meta property="og:updated_time" content="2018-11-27T05:32:32.205Z">
+<meta property="og:updated_time" content="2019-04-04T07:00:07.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用安装在 Docker 中的 jenkins 运行 Docker 任务">
 <meta name="twitter:description" content="题目有点绕，我先尝试翻译成人话——首先安装一个 jenkins，这个 jenkins 是通过 docker 安装的，然后要用这个 jenkins 来运行自动化的项目，项目中会用到 docker 命令。而这种工作场景，采用默认的配置，是完成不了的。">
@@ -390,7 +390,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker run <span class="_">-d</span> \</div><div class="line">	-v /var/run/docker.sock:/var/run/docker.sock \</div><div class="line">	-v $(<span class="built_in">which</span> docker):/usr/bin/docker </div><div class="line">	-p 8080:8080 \</div><div class="line">	andyzhshg/jenkins</div></pre></td></tr></table></figure>
 <p>需要重点关注带有<code>-v</code>参数的两行：</p>
 <p>第1行是将宿主机的<code>/var/run/docker.sock</code>映射到容器中，这样在容器中运行的docker命令，就会在宿主机上来执行。</p>
-<p>第2行是将宿主机的<code>docker</code>程序映射进容器中，这样本省没有安装docker的jenkins容器就可以执行docker命令了（事实上容器里是没有运行docker的服务的，我们只是用这个映射进容器的docker来作为客户端发送docker的指令到<code>/var/run/docker.sock</code>而已，儿<code>/var/run/docker.sock</code>已经被链接到宿主机了）。</p>
+<p>第2行是将宿主机的<code>docker</code>程序映射进容器中，这样本身没有安装docker的jenkins容器就可以执行docker命令了（事实上容器里是没有运行docker的服务的，我们只是用这个映射进容器的docker来作为客户端发送docker的指令到<code>/var/run/docker.sock</code>而已，儿<code>/var/run/docker.sock</code>已经被链接到宿主机了）。</p>
 <p>至此，我们的jenkins就准备就绪了。</p>
 <blockquote>
 <p>当然，通常情况下我们还需要把jenkins自身的数据目录链接到宿主机的目录中，以保证容器被销毁后还能够再启动新的数据而数据可以得到保留，这些可以参考jenkins官方镜像的说明。</p>
