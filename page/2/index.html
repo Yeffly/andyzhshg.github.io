@@ -299,6 +299,131 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/10/install-vmm-on-ds716/" itemprop="url">
+                  在群晖 DS716+II 上安装 VMM(Virtual Machine Manager)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-10T13:12:00+08:00" content="2018-05-10">
+              2018-05-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/泛技术/" itemprop="url" rel="index">
+                    <span itemprop="name">泛技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/10/install-vmm-on-ds716/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/10/install-vmm-on-ds716/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我有一台群晖的NAS，型号是DS 716+II。一直都知道群晖的高端型号都是支持虚拟化的，但是在群晖的官网上查Virtual Machine Manager的支持机型，我的716+II是不支持的。不过因为这个机器是支持Docker的，所以不支持虚拟机就不支持吧，反正大部分我想要的功能用Docker都实现，这机器的赛扬处理器用来跑虚拟机本身也不会跑的很舒服。</p>
+<p>不过最近在研究如何自动化的把DS Photo上的照片再备份一份到Google Photos，毕竟Google Photos的体验还是很不错的。</p>
+<p>网上查到有人说了一种曲线救国的方案：用VMM虚拟一个Windows，然后在Windows里安装Google的Windows版的客户端。虽然蛋疼，但也是一种曲线救国的方案，于是我开始研究怎么在我的机器上安装VMM。然后发现居然非常简单，直接下载一个916+(其他x86平台的安装包应该也都可以)的VMM的安装包，手动安装即可…</p>
+<p>我做一下雷锋，直接把916+的VMM安装包的下载页面贴这里，免去大家自己找的麻烦：</p>
+<p><a href="https://www.synology.cn/zh-cn/support/download/DS916+#packages" target="_blank" rel="external">https://www.synology.cn/zh-cn/support/download/DS916+#packages</a></p>
+<p>在这个页面里搜索<code>Virtual Machine Manager</code>即可找到下载链接。至于怎么手动安装，怎么使用VMM，我就不详细说了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/05/05/git-multi-ssh-key/" itemprop="url">
                   管理多个github账号的 ssh key
                 </a>
@@ -1405,130 +1530,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/07/use-xcode-targets/" itemprop="url">
-                  巧用Xcode的Target管理开发和生产的APP版本
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-07T19:06:01+08:00" content="2015-09-07">
-              2015-09-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动开发/" itemprop="url" rel="index">
-                    <span itemprop="name">移动开发</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/07/use-xcode-targets/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/09/07/use-xcode-targets/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。</p>
-<p>遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。</p>
-<p>其实，Xcode的Target功能能够很好地解决这个问题。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/09/07/use-xcode-targets/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1574,7 +1575,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1582,7 +1583,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1591,7 +1592,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

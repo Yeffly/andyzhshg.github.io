@@ -299,6 +299,134 @@
             
               
                 
+                <a class="post-title-link" href="/2019/05/16/go-exec-pipeline-support-trick/" itemprop="url">
+                  一个让go的exec支持管道的小窍门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-05-16T17:25:03+08:00" content="2019-05-16">
+              2019-05-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/go/" itemprop="url" rel="index">
+                    <span itemprop="name">go</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/05/16/go-exec-pipeline-support-trick/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/16/go-exec-pipeline-support-trick/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在一个 <code>golang</code> 开发的项目中需要用 <code>exec</code> 库调用外部 <code>shell</code> 命令，这个命令中用到了管道(<code>pipline</code>)。</p>
+<p>由于是第一次用 <code>exec</code> 库，我想当然的把代码写成了这个样子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></div><div class="line"><span class="keyword">import</span> <span class="string">"os/exec"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    cmdStr := fmt.Sprintf(<span class="string">"ls -l %s | head -n %d"</span>, <span class="string">"."</span>, <span class="number">10</span>)</div><div class="line">    cmd := exec.Command(cmdStr)</div><div class="line">    <span class="keyword">if</span> out, err := cmd.CombinedOutput(); err != <span class="literal">nil</span> &#123;</div><div class="line">        fmt.Errorf(<span class="string">"Error: %v\n"</span>, err)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        fmt.Printf(<span class="string">"Success: %s\n%s\n"</span>, cmdStr, out)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行的时候发现这段代码是不能正确的工作的，经过在网上一通搜索后，发现网上给出的方案大致都是这个样子的：<a href="https://stackoverflow.com/questions/10781516/how-to-pipe-several-commands-in-go" target="_blank" rel="external">https://stackoverflow.com/questions/10781516/how-to-pipe-several-commands-in-go</a>。这种方案确实是解决了问题，但是看起来却十分的复杂，我只是想调用一句 <code>shell</code> 命令而已，却要多写上十几行的 <code>go</code> 代码。</p>
+<p>有没有更简单的方法呢？既然 <code>go</code> 自身处理不了，是否可以用 <code>go</code> 之外的工具来解决呢？</p>
+<p>然后就有了这个曲线救国的方案，<code>exec</code> 不再直接执行这个带有管道的命令，而是执行 <code>sh</code> 命令，然后我们的带有管道的 <code>shell</code> 命令作为参数传给 <code>sh</code> 来运行，类似于：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sh -c <span class="string">"ls -l . | head -n 10"</span></div></pre></td></tr></table></figure>
+<p>至此，问题迎刃而解，比网上找到的方案简单了很多。落实到 <code>go</code> 代码大概就是下面的样子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></div><div class="line"><span class="keyword">import</span> <span class="string">"os/exec"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    cmdStr := fmt.Sprintf(<span class="string">"ls -l %s | head -n %d"</span>, <span class="string">"."</span>, <span class="number">10</span>)</div><div class="line">    cmd := exec.Command(<span class="string">"sh"</span>, <span class="string">"-c"</span>, cmdStr)</div><div class="line">    <span class="keyword">if</span> out, err := cmd.CombinedOutput(); err != <span class="literal">nil</span> &#123;</div><div class="line">        fmt.Errorf(<span class="string">"Error: %v\n"</span>, err)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        fmt.Printf(<span class="string">"Success: %s\n%s\n"</span>, cmdStr, out)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/04/02/etcd-v2-v3/" itemprop="url">
                   etcd v2 v3 同时存在的问题
                 </a>
@@ -1407,131 +1535,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/05/10/install-vmm-on-ds716/" itemprop="url">
-                  在群晖 DS716+II 上安装 VMM(Virtual Machine Manager)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-05-10T13:12:00+08:00" content="2018-05-10">
-              2018-05-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/泛技术/" itemprop="url" rel="index">
-                    <span itemprop="name">泛技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/05/10/install-vmm-on-ds716/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/10/install-vmm-on-ds716/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我有一台群晖的NAS，型号是DS 716+II。一直都知道群晖的高端型号都是支持虚拟化的，但是在群晖的官网上查Virtual Machine Manager的支持机型，我的716+II是不支持的。不过因为这个机器是支持Docker的，所以不支持虚拟机就不支持吧，反正大部分我想要的功能用Docker都实现，这机器的赛扬处理器用来跑虚拟机本身也不会跑的很舒服。</p>
-<p>不过最近在研究如何自动化的把DS Photo上的照片再备份一份到Google Photos，毕竟Google Photos的体验还是很不错的。</p>
-<p>网上查到有人说了一种曲线救国的方案：用VMM虚拟一个Windows，然后在Windows里安装Google的Windows版的客户端。虽然蛋疼，但也是一种曲线救国的方案，于是我开始研究怎么在我的机器上安装VMM。然后发现居然非常简单，直接下载一个916+(其他x86平台的安装包应该也都可以)的VMM的安装包，手动安装即可…</p>
-<p>我做一下雷锋，直接把916+的VMM安装包的下载页面贴这里，免去大家自己找的麻烦：</p>
-<p><a href="https://www.synology.cn/zh-cn/support/download/DS916+#packages" target="_blank" rel="external">https://www.synology.cn/zh-cn/support/download/DS916+#packages</a></p>
-<p>在这个页面里搜索<code>Virtual Machine Manager</code>即可找到下载链接。至于怎么手动安装，怎么使用VMM，我就不详细说了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1577,7 +1580,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1585,7 +1588,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1594,7 +1597,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

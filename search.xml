@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[一个让go的exec支持管道的小窍门]]></title>
+    <url>%2F2019%2F05%2F16%2Fgo-exec-pipeline-support-trick%2F</url>
+    <content type="text"><![CDATA[最近在一个 golang 开发的项目中需要用 exec 库调用外部 shell 命令，这个命令中用到了管道(pipline)。 由于是第一次用 exec 库，我想当然的把代码写成了这个样子： 1234567891011121314package mainimport "fmt"import "os/exec"func main() &#123; cmdStr := fmt.Sprintf("ls -l %s | head -n %d", ".", 10) cmd := exec.Command(cmdStr) if out, err := cmd.CombinedOutput(); err != nil &#123; fmt.Errorf("Error: %v\n", err) &#125; else &#123; fmt.Printf("Success: %s\n%s\n", cmdStr, out) &#125;&#125; 运行的时候发现这段代码是不能正确的工作的，经过在网上一通搜索后，发现网上给出的方案大致都是这个样子的：https://stackoverflow.com/questions/10781516/how-to-pipe-several-commands-in-go。这种方案确实是解决了问题，但是看起来却十分的复杂，我只是想调用一句 shell 命令而已，却要多写上十几行的 go 代码。 有没有更简单的方法呢？既然 go 自身处理不了，是否可以用 go 之外的工具来解决呢？ 然后就有了这个曲线救国的方案，exec 不再直接执行这个带有管道的命令，而是执行 sh 命令，然后我们的带有管道的 shell 命令作为参数传给 sh 来运行，类似于： 1sh -c "ls -l . | head -n 10" 至此，问题迎刃而解，比网上找到的方案简单了很多。落实到 go 代码大概就是下面的样子： 1234567891011121314package mainimport "fmt"import "os/exec"func main() &#123; cmdStr := fmt.Sprintf("ls -l %s | head -n %d", ".", 10) cmd := exec.Command("sh", "-c", cmdStr) if out, err := cmd.CombinedOutput(); err != nil &#123; fmt.Errorf("Error: %v\n", err) &#125; else &#123; fmt.Printf("Success: %s\n%s\n", cmdStr, out) &#125;&#125;]]></content>
+      <categories>
+        <category>go</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+        <tag>go</tag>
+        <tag>bash</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[etcd v2 v3 同时存在的问题]]></title>
     <url>%2F2019%2F04%2F02%2Fetcd-v2-v3%2F</url>
     <content type="text"><![CDATA[最近使用 etcd 时候遇到了一个问题，发现用 go 代码调用 clientv3 写进去的 key 和用 etcdctl 的 key 是不一样的，而且两边可以同时读写相同的 key， 但是知确实不相同的。 因为这个问题查了将近两个小时，最后发现，原来 etcd 默认情况下是 v2 和 v3 的客户端 API 共存的，而两个版本的 API 产生和查询的数据时隔离的。 用 etcd 的过程中看了不少的文章，结果恰恰我看的文章里都没有提到这一点，结果当了冤大头，浪费了这么多时间。 其实现在应该大部分人都是用 v3 版本的 API，etcdctl 默认却是 v2的 API。不知道是出于什么考虑没有把 v3 版本 API 作为 etcdctl 的默认 API 版本。 至于我会问到这个问题，也是因为我在开发的过程中想要用 etcdctl 来验证我的代码写进去的数据是否正确，如果我没有用 etcdctl 来读 go 客户端写进去的数据的话，也就不会有这个问题了。如果想要让 etcdctl 默认用 v3 版的 API，可用在使用 etcdctl 之前，设置版本环境变量： 12export ETCDCTL_API=3etcdctl ... 如果不想每次使用 etcdctl 是都设置，可以在 .bashrc 或者 .bash_profile 加入该语句： 1export ETCDCTL_API=3]]></content>
@@ -23,8 +36,8 @@
         <tag>技术</tag>
         <tag>git</tag>
         <tag>ss</tag>
-        <tag>mac</tag>
         <tag>go</tag>
+        <tag>mac</tag>
       </tags>
   </entry>
   <entry>
