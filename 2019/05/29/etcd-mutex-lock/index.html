@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
+<meta name="description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到即长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
 <meta name="keywords" content="技术,etcd,go,分布式,锁">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一个用 etcd 作主备锁的细节问题">
 <meta property="og:url" content="http://www.up4dev.com/2019/05/29/etcd-mutex-lock/index.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
-<meta property="og:updated_time" content="2019-05-29T09:05:38.471Z">
+<meta property="og:description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到即长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
+<meta property="og:updated_time" content="2019-05-29T09:11:37.240Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个用 etcd 作主备锁的细节问题">
-<meta name="twitter:description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
+<meta name="twitter:description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到即长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
 
 
 
@@ -313,7 +313,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-05-29T16:04:00+08:00" content="2019-05-29">
+            <time itemprop="dateCreated" datetime="2019-05-29T08:04:00+00:00" content="2019-05-29">
               2019-05-29
             </time>
           </span>
@@ -376,7 +376,7 @@
 <p>通常的分布式的锁的应用场景有如下几种方式：</p>
 <ol>
 <li>即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 <code>etcd</code> 服务</li>
-<li>还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 <code>etcd</code> 交互。</li>
+<li>还有一种就是先到先得，得到即长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 <code>etcd</code> 交互。</li>
 </ol>
 <p>本文主要讨论第2种场景中遇到的一个细节问题。</p>
 <a id="more"></a>
@@ -385,7 +385,7 @@
 <p>在 <code>// do real work here</code> 执行过程中，很可能我们的网络状态出现了问题，或者 <code>etcd</code> 服务出现问题导致程序已经跟网络断开，这时实际上锁很可能已经失效了。为了保证锁的有效性，我们可以在<code>session</code>的有效期内轮询锁的状态，但是这种做法很繁琐，也比较浪费资源。有没有更好的方式呢？</p>
 <p>好在 <code>session</code> 提供了一个 <code>Done</code> 方法，该方法返回一个 <code>channel</code> ， 一旦 <code>session</code> 结束，这个 <code>channel</code> 就会被写入内容，这样就给了我们一个简单地方法来监控锁的状态。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"context"</span></div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line"></div><div class="line">	<span class="string">"go.etcd.io/etcd/clientv3"</span></div><div class="line">	<span class="string">"go.etcd.io/etcd/clientv3/concurrency"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	client, errClient := clientv3.New(clientv3.Config&#123;Endpoints: []<span class="keyword">string</span>&#123;<span class="string">"http://127.0.0.1:2379"</span>&#125;, DialTimeout: <span class="number">10</span> * time.Second&#125;)</div><div class="line">	<span class="keyword">if</span> errClient != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"client create fail - %v"</span>, errClient)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	session, errSession := concurrency.NewSession(client, concurrency.WithTTL(<span class="number">10</span>))</div><div class="line">	<span class="keyword">if</span> errSession != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"create session fail - %v"</span>, errSession)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	mutex := concurrency.NewMutex(session, <span class="string">"/lock"</span>)</div><div class="line">	<span class="keyword">if</span> mutex == <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"create mutex fail"</span>)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	errMutex := mutex.Lock(context.TODO())</div><div class="line">	<span class="keyword">if</span> errMutex != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"lock fail - %v"</span>, errMutex)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	fmt.Println(<span class="string">"got lock, begin run work"</span>)</div><div class="line"></div><div class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">		<span class="keyword">select</span> &#123;</div><div class="line">		<span class="keyword">case</span> &lt;-session.Done():</div><div class="line">			<span class="comment">// do what ever you want to process lock lost</span></div><div class="line">			fmt.Println(<span class="string">"lock lost"</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;()</div><div class="line"></div><div class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">		<span class="comment">// do real work</span></div><div class="line">	&#125;()</div><div class="line"></div><div class="line">	<span class="comment">// prevent progress quit</span></div><div class="line">	<span class="keyword">select</span> &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>如上边的代码所示，我们在一个 <code>goroutine</code> 中监听一个 <code>&lt;-session.Done()</code> 的 <code>channel</code> ，这样，一旦我们的锁出现了问题，就会得到通知，这样我们就可以在这里进行一些所丢失的善后工作，在这里停止所有的需要所才能进行的工作，就不会出现锁已经失效，但是工作进程却全然不知的状况了。</p>
+<p>如上边的代码所示，我们在一个 <code>goroutine</code> 中监听一个 <code>&lt;-session.Done()</code> 的 <code>channel</code> ，这样，一旦锁出现了问题，就会得到通知，这样就可以在这里进行一些锁丢失的善后工作，比如在这里停止所有的需要锁才能进行的工作，这样就不会出现锁已经失效，但是工作进程却全然不知的状况了。</p>
 
       
     </div>
