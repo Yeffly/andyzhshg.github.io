@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="技术,git,ss," />
+  <meta name="keywords" content="技术,etcd,go,分布式,锁," />
 
 
 
@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="github 还没有被墙，但是 github 很慢（至少我家的北京电信宽带下情况是这样）。终于忍受不了github 10~50 KB 的下载速度，我在网上找了下设置代理的方法，让 git 命令可以通过 ss 代理拉取 github 的代码。">
-<meta name="keywords" content="技术,git,ss">
+<meta name="description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
+<meta name="keywords" content="技术,etcd,go,分布式,锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何让git命令通过ss拉取github代码">
-<meta property="og:url" content="http://www.up4dev.com/2018/05/14/github-use-ss/index.html">
+<meta property="og:title" content="一个用 etcd 作主备锁的细节问题">
+<meta property="og:url" content="http://www.up4dev.com/2019/05/29/etcd-mutex-lock/index.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:description" content="github 还没有被墙，但是 github 很慢（至少我家的北京电信宽带下情况是这样）。终于忍受不了github 10~50 KB 的下载速度，我在网上找了下设置代理的方法，让 git 命令可以通过 ss 代理拉取 github 的代码。">
-<meta property="og:updated_time" content="2019-02-15T09:00:14.030Z">
+<meta property="og:description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
+<meta property="og:updated_time" content="2019-05-29T09:05:38.471Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何让git命令通过ss拉取github代码">
-<meta name="twitter:description" content="github 还没有被墙，但是 github 很慢（至少我家的北京电信宽带下情况是这样）。终于忍受不了github 10~50 KB 的下载速度，我在网上找了下设置代理的方法，让 git 命令可以通过 ss 代理拉取 github 的代码。">
+<meta name="twitter:title" content="一个用 etcd 作主备锁的细节问题">
+<meta name="twitter:description" content="etcd 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。 通常的分布式的锁的应用场景有如下几种方式：  即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 etcd 服务 还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 etcd 交互。  本文主要">
 
 
 
@@ -117,10 +117,10 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/2018/05/14/github-use-ss/"/>
+  <link rel="canonical" href="http://www.up4dev.com/2019/05/29/etcd-mutex-lock/"/>
 
 
-  <title> 如何让git命令通过ss拉取github代码 | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> 一个用 etcd 作主备锁的细节问题 | UP4DEV </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -301,7 +301,7 @@
             
             
               
-                如何让git命令通过ss拉取github代码
+                一个用 etcd 作主备锁的细节问题
               
             
           </h1>
@@ -313,8 +313,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-05-14T14:26:00+00:00" content="2018-05-14">
-              2018-05-14
+            <time itemprop="dateCreated" datetime="2019-05-29T16:04:00+08:00" content="2019-05-29">
+              2019-05-29
             </time>
           </span>
 
@@ -327,8 +327,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/泛技术/" itemprop="url" rel="index">
-                    <span itemprop="name">泛技术</span>
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
                   </a>
                 </span>
 
@@ -343,8 +343,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2018/05/14/github-use-ss/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/14/github-use-ss/" itemprop="commentsCount"></span>
+                <a href="/2019/05/29/etcd-mutex-lock/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/29/etcd-mutex-lock/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -372,31 +372,20 @@
       
 
       
-        <p><code>github</code> 还没有被墙，但是 <code>github</code> 很慢（至少我家的北京电信宽带下情况是这样）。终于忍受不了<code>github</code> 10~50 KB 的下载速度，我在网上找了下设置代理的方法，让 <code>git</code> 命令可以通过 <code>ss</code> 代理拉取 <code>github</code> 的代码。</p>
+        <p><code>etcd</code> 越来越多的被应用在分布式系统中，最典型的一个应用场景就是作为分布式锁，用于在分布式系统中保证资源的独占。</p>
+<p>通常的分布式的锁的应用场景有如下几种方式：</p>
+<ol>
+<li>即用即申请，用完即释放，一般用于资源控制粒度比较细的系统，这种场景会频繁的调用 <code>etcd</code> 服务</li>
+<li>还有一种就是先到先得，得到及长期占有，这种更多是用在主备系统的切换场景，如果占有锁的服务不发生异常，则不会主动与 <code>etcd</code> 交互。</li>
+</ol>
+<p>本文主要讨论第2种场景中遇到的一个细节问题。</p>
 <a id="more"></a>
-<p>我们从 <code>clone</code> 一个全新的项目开始。</p>
-<blockquote>
-<p>这里其实是针对特定项目设置代理的方法，其实也可以设置全局的代理，这样每个项目就跟不设置代理时一样操作就可以了，我不想每个项目都走代理（因为我有一些不托管在 <code>github</code> 的项目），所以才会分开设置。设置全局代理的方法，可以参考我在文末给出的参考链接。</p>
-</blockquote>
-<h2 id="1-构建项目目录"><a href="#1-构建项目目录" class="headerlink" title="1. 构建项目目录"></a>1. 构建项目目录</h2><p>一般情况下，我们克隆一个项目都是直接通过 <code>git clone</code> 命令，像这样：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> git@github.com:YourName/YourRepo.git</div></pre></td></tr></table></figure>
-<p>或者这样</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/YourName/YourRepo.git</div></pre></td></tr></table></figure>
-<p><code>git clone</code>命令会创建一个目录并将项目的代码数据拉取到这个目录中，这样的话我们还没有机会给项目设置代理，就已经开始从网络获取数据了。所以这里我将这个步骤做了一下分解。</p>
-<p>我们通过下边的步骤来初始化项目</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 首先创建一个空的项目目录</span></div><div class="line">mkdir YourRepo</div><div class="line"><span class="built_in">cd</span> YourRepo</div><div class="line"><span class="comment"># 初始化git环境</span></div><div class="line">git init</div><div class="line"><span class="comment"># 添加远端分支</span></div><div class="line">git remote add master git@github.com:YourName/YourRepo.git</div><div class="line"><span class="comment"># 或者</span></div><div class="line">git remote add master https://github.com/YourName/YourRepo.git</div></pre></td></tr></table></figure>
-<p>这样我们就初始化好了一个项目，下一步我们将为这个项目设置 <code>ss</code> 代理。</p>
-<h2 id="2-设置-ss-代理"><a href="#2-设置-ss-代理" class="headerlink" title="2. 设置 ss 代理"></a>2. 设置 <code>ss</code> 代理</h2><p>设置代理的方式很简单就一条命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config http.proxy <span class="string">'socks5://127.0.0.1:1080'</span></div></pre></td></tr></table></figure>
-<p>上面对应的是通过http协议的方法，对应git协议，通过下边的命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config core.gitProxy  <span class="string">'socks5://127.0.0.1:1080'</span></div></pre></td></tr></table></figure>
-<h2 id="3-拉取代码"><a href="#3-拉取代码" class="headerlink" title="3. 拉取代码"></a>3. 拉取代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git pull</div></pre></td></tr></table></figure>
-<p>到这里基本上就讲完了，如果是一个已经存在的项目，之前没有走代理，现在想走代理，那么其实更简单，略过第1步，从第2步开始即可。</p>
-<blockquote>
-<p>如果是新建项目，执行完 <code>git pull</code> 后可能发现目录是空的，这是因为项目此时没有在任何一个指定的分支下，只要执行形如 <code>git checkout master</code> 命令来把项目切到一个分支即可。</p>
-</blockquote>
-<p><em>参考：</em> <a href="http://www.afox.cc/archives/404" target="_blank" rel="external">Git搭配shadowsocks使用代理访问github</a></p>
-<p>[^update 2019.02.15]: <a href="/2019/02/15/mac-term-ss/">这篇文章</a> 提到的方法可能是mac上一个更加便捷且普适的方法。</p>
+<p>在主备切换的场景，我们希望服务一旦获取到锁，就不必主动的与 <code>etcd</code> 交互，而是专心的进行自己的本职工作。但是如果不主动跟 <code>etcd</code> 询问持有的锁的状态的话，我们又无法保证当前是确实持有锁的。正如下边的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"context"</span></div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line"></div><div class="line">	<span class="string">"go.etcd.io/etcd/clientv3"</span></div><div class="line">	<span class="string">"go.etcd.io/etcd/clientv3/concurrency"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	client, errClient := clientv3.New(clientv3.Config&#123;Endpoints: []<span class="keyword">string</span>&#123;<span class="string">"http://127.0.0.1:2379"</span>&#125;, DialTimeout: <span class="number">10</span> * time.Second&#125;)</div><div class="line">	<span class="keyword">if</span> errClient != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"client create fail - %v"</span>, errClient)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	session, errSession := concurrency.NewSession(client, concurrency.WithTTL(<span class="number">10</span>))</div><div class="line">	<span class="keyword">if</span> errSession != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"create session fail - %v"</span>, errSession)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	mutex := concurrency.NewMutex(session, <span class="string">"/lock"</span>)</div><div class="line">	<span class="keyword">if</span> mutex == <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"create mutex fail"</span>)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	errMutex := mutex.Lock(context.TODO())</div><div class="line">	<span class="keyword">if</span> errMutex != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"lock fail - %v"</span>, errMutex)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	fmt.Println(<span class="string">"got lock, begin run work"</span>)</div><div class="line"></div><div class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">		<span class="comment">// do real work here</span></div><div class="line">	&#125;()</div><div class="line"></div><div class="line">	<span class="comment">// prevent progress quit</span></div><div class="line">	<span class="keyword">select</span> &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在 <code>// do real work here</code> 执行过程中，很可能我们的网络状态出现了问题，或者 <code>etcd</code> 服务出现问题导致程序已经跟网络断开，这时实际上锁很可能已经失效了。为了保证锁的有效性，我们可以在<code>session</code>的有效期内轮询锁的状态，但是这种做法很繁琐，也比较浪费资源。有没有更好的方式呢？</p>
+<p>好在 <code>session</code> 提供了一个 <code>Done</code> 方法，该方法返回一个 <code>channel</code> ， 一旦 <code>session</code> 结束，这个 <code>channel</code> 就会被写入内容，这样就给了我们一个简单地方法来监控锁的状态。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"context"</span></div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"time"</span></div><div class="line"></div><div class="line">	<span class="string">"go.etcd.io/etcd/clientv3"</span></div><div class="line">	<span class="string">"go.etcd.io/etcd/clientv3/concurrency"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	client, errClient := clientv3.New(clientv3.Config&#123;Endpoints: []<span class="keyword">string</span>&#123;<span class="string">"http://127.0.0.1:2379"</span>&#125;, DialTimeout: <span class="number">10</span> * time.Second&#125;)</div><div class="line">	<span class="keyword">if</span> errClient != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"client create fail - %v"</span>, errClient)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	session, errSession := concurrency.NewSession(client, concurrency.WithTTL(<span class="number">10</span>))</div><div class="line">	<span class="keyword">if</span> errSession != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"create session fail - %v"</span>, errSession)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	mutex := concurrency.NewMutex(session, <span class="string">"/lock"</span>)</div><div class="line">	<span class="keyword">if</span> mutex == <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"create mutex fail"</span>)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	errMutex := mutex.Lock(context.TODO())</div><div class="line">	<span class="keyword">if</span> errMutex != <span class="literal">nil</span> &#123;</div><div class="line">		fmt.Errorf(<span class="string">"lock fail - %v"</span>, errMutex)</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	fmt.Println(<span class="string">"got lock, begin run work"</span>)</div><div class="line"></div><div class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">		<span class="keyword">select</span> &#123;</div><div class="line">		<span class="keyword">case</span> &lt;-session.Done():</div><div class="line">			<span class="comment">// do what ever you want to process lock lost</span></div><div class="line">			fmt.Println(<span class="string">"lock lost"</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;()</div><div class="line"></div><div class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</div><div class="line">		<span class="comment">// do real work</span></div><div class="line">	&#125;()</div><div class="line"></div><div class="line">	<span class="comment">// prevent progress quit</span></div><div class="line">	<span class="keyword">select</span> &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如上边的代码所示，我们在一个 <code>goroutine</code> 中监听一个 <code>&lt;-session.Done()</code> 的 <code>channel</code> ，这样，一旦我们的锁出现了问题，就会得到通知，这样我们就可以在这里进行一些所丢失的善后工作，在这里停止所有的需要所才能进行的工作，就不会出现锁已经失效，但是工作进程却全然不知的状况了。</p>
 
       
     </div>
@@ -421,9 +410,13 @@
           
             <a href="/tags/技术/" rel="tag">#技术</a>
           
-            <a href="/tags/git/" rel="tag">#git</a>
+            <a href="/tags/etcd/" rel="tag">#etcd</a>
           
-            <a href="/tags/ss/" rel="tag">#ss</a>
+            <a href="/tags/go/" rel="tag">#go</a>
+          
+            <a href="/tags/分布式/" rel="tag">#分布式</a>
+          
+            <a href="/tags/锁/" rel="tag">#锁</a>
           
         </div>
       
@@ -432,17 +425,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/10/install-vmm-on-ds716/" rel="next" title="在群晖 DS716+II 上安装 VMM(Virtual Machine Manager)">
-                <i class="fa fa-chevron-left"></i> 在群晖 DS716+II 上安装 VMM(Virtual Machine Manager)
+              <a href="/2019/05/16/go-exec-pipeline-support-trick/" rel="next" title="一个让go的exec支持管道的小窍门">
+                <i class="fa fa-chevron-left"></i> 一个让go的exec支持管道的小窍门
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/29/synology-ssl-wildcard-cert-update/" rel="prev" title="群晖 Let's Encrypt 泛域名证书自动更新">
-                群晖 Let's Encrypt 泛域名证书自动更新 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -583,7 +572,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-构建项目目录"><span class="nav-text">1. 构建项目目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-设置-ss-代理"><span class="nav-text">2. 设置 ss 代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-拉取代码"><span class="nav-text">3. 拉取代码</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
@@ -719,9 +708,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = '2018/05/14/github-use-ss/';
-      var disqus_title = "如何让git命令通过ss拉取github代码";
-      var disqus_url = 'http://www.up4dev.com/2018/05/14/github-use-ss/';
+      var disqus_identifier = '2019/05/29/etcd-mutex-lock/';
+      var disqus_title = "一个用 etcd 作主备锁的细节问题";
+      var disqus_url = 'http://www.up4dev.com/2019/05/29/etcd-mutex-lock/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
