@@ -299,6 +299,129 @@
             
               
                 
+                <a class="post-title-link" href="/2018/05/29/synology-ssl-wildcard-cert-update/" itemprop="url">
+                  群晖 Let's Encrypt 泛域名证书自动更新
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-29T18:00:00+08:00" content="2018-05-29">
+              2018-05-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/泛技术/" itemprop="url" rel="index">
+                    <span itemprop="name">泛技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/29/synology-ssl-wildcard-cert-update/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/29/synology-ssl-wildcard-cert-update/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>去年曾经写过一篇文章介绍如<a href="http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/">何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书</a>。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似<code>*.domain.com</code>的单一证书，就可以适配<code>abc.domain.com</code>，<code>xyz.domain.com</code>这类的子域名，而不需要单独为每个子域名申请证书了。</p>
+<p><a href="https://github.com/Neilpang/acme.sh" target="_blank" rel="external"><strong>Neilpang/acme.sh</strong></a> 工具很快就支持新的协议了，我这篇文章就是在这个工具的基础上，实现泛域名的自动更新。为了减少复杂度，我编写了一个一键更新的懒人脚本，来帮助不愿意了解原理的同学快速部署。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/05/29/synology-ssl-wildcard-cert-update/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/05/14/github-use-ss/" itemprop="url">
                   如何让git命令通过ss拉取github代码
                 </a>
@@ -1299,129 +1422,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/09/docker-network-create/" itemprop="url">
-                  用network create解决Docker容器互相连接的问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-09T20:00:00+08:00" content="2016-10-09">
-              2016-10-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/泛技术/" itemprop="url" rel="index">
-                    <span itemprop="name">泛技术</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/09/docker-network-create/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/10/09/docker-network-create/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>目前在做一个P2P的程序，为了方便测试和部署，我们用<code>docker</code>来运行相同的程序实例。</p>
-<p>作为一个P2P的程序，所有的实例之间应该是对等的，并且可以相互连接通信，看似简单，一开始的时候我们却在这里栽了跟头…</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/09/docker-network-create/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/10/09/cpp11-unique_ptr/" itemprop="url">
                   C++11的智能指针(1) unique_ptr
                 </a>
@@ -1574,7 +1574,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1591,7 +1591,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
