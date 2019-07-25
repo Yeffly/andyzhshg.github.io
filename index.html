@@ -299,6 +299,133 @@
             
               
                 
+                <a class="post-title-link" href="/2019/07/24/text-process-by-apple-script/" itemprop="url">
+                  用 AppleScript 一键自动处理选中的文本
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-07-24T18:31:50+08:00" content="2019-07-24">
+              2019-07-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/07/24/text-process-by-apple-script/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/24/text-process-by-apple-script/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>这篇文章提到的方法是为了解决我在工作中遇到的一个实际问题，问题大概是这个样子的：</p>
+<p>我的一个服务程序使用 <code>golang</code> 写的，其中的日志用了<a href="https://github.com/sirupsen/logrus" target="_blank" rel="external"><code>logrus</code></a> 这个库，这个库本身很好用，但是我碰到一个问题 ，就是我的 log 中有一些数据本身就是以 json 格式输出的，但是 logrus 在日志文件中会默认的给输出中的双引号转义，最后看到的日志大概是这个样子的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">time=&quot;2019-07-24T10:39:06Z&quot; level=info msg=&quot;[Out] &#123;\&quot;id\&quot;:257944,\&quot;type\&quot;:1,\&quot;timestamp\&quot;:1563964746233023125,\&quot;offer_id\&quot;:741807,\&quot;status\&quot;:&#123;\&quot;code\&quot;:0,\&quot;message\&quot;:\&quot;ok\&quot;&#125;,\&quot;data\&quot;:&#123;\&quot;symbol\&quot;:4,\&quot;topic\&quot;:\&quot;rest2engine_12_13\&quot;&#125;&#125;&quot;</div><div class="line">time=&quot;2019-07-24T10:39:06Z&quot; level=info msg=&quot;[Out] &#123;\&quot;id\&quot;:257945,\&quot;type\&quot;:3,\&quot;timestamp\&quot;:1563964746233044370,\&quot;trigger\&quot;:&#123;\&quot;id\&quot;:741807,\&quot;is_bid\&quot;:false,\&quot;amount\&quot;:\&quot;4380000000\&quot;,\&quot;clear\&quot;:true,\&quot;balance\&quot;:\&quot;0\&quot;,\&quot;data\&quot;:&#123;\&quot;symbol\&quot;:4,\&quot;topic\&quot;:\&quot;rest2engine_12_13\&quot;&#125;&#125;,\&quot;match\&quot;:[&#123;\&quot;id\&quot;:740840,\&quot;price\&quot;:\&quot;2074400000000\&quot;,\&quot;amount\&quot;:\&quot;1940000000\&quot;,\&quot;clear\&quot;:true,\&quot;balance\&quot;:\&quot;0\&quot;,\&quot;data\&quot;:&#123;\&quot;symbol\&quot;:4,\&quot;topic\&quot;:\&quot;rest2engine_12_13\&quot;&#125;&#125;,&#123;\&quot;id\&quot;:741724,\&quot;price\&quot;:\&quot;2074400000000\&quot;,\&quot;amount\&quot;:\&quot;2440000000\&quot;,\&quot;clear\&quot;:false,\&quot;balance\&quot;:\&quot;10735020000000000000000\&quot;,\&quot;data\&quot;:&#123;\&quot;symbol\&quot;:4,\&quot;topic\&quot;:\&quot;rest2engine_12_13\&quot;&#125;&#125;],\&quot;status\&quot;:&#123;\&quot;code\&quot;:0,\&quot;message\&quot;:\&quot;ok\&quot;&#125;&#125;&quot;</div></pre></td></tr></table></figure>
+<p>一般情况下，需要人肉去读这些日志的时候我会把 json 数据拷贝出来粘贴到一个可以格式化 json 的编辑器中。但是因为这个带了转义符号的数据已经不是合法的 json 了，所以 json 编辑器是无法直接处理的。</p>
+<p>我已开始的做法是把数据拷贝到文本编辑器中，然后通过全局替换的方式把转义字符替换掉，即用 <code>&quot;</code> 替换 <code>\&quot;</code> 。这种方式其实在我这个场景工作的很好，只是比较麻烦，每次都要通过文本编辑器全局替换一次。</p>
+<p>那么有没有更加有效率的方式呢？一开始我是想到可以自己写一个小程序专门的来处理这个替换过程，不过每次都需要调用小程序，比贴到文本编辑器全局替换也省不了时间。然后我就突然想到了是不是可以用 mac 的自动操作 Apple Script 来完成这件事，能想到这个是因为我之前在一篇文章里学到过通过 Apple Script 添加 VS Code 的右键菜单。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/07/24/text-process-by-apple-script/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/07/23/dns-load-balance/" itemprop="url">
                   利用 dns 负载均衡提高宽带多拨状态下的上行并发能力
                 </a>
@@ -327,8 +454,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/范技术/" itemprop="url" rel="index">
-                    <span itemprop="name">范技术</span>
+                  <a href="/categories/泛技术/" itemprop="url" rel="index">
+                    <span itemprop="name">泛技术</span>
                   </a>
                 </span>
 
@@ -1407,133 +1534,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/06/26/eos-code-read-1-appbase/" itemprop="url">
-                  EOS 代码分析 [1] —— AppBase
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-06-26T15:35:00+08:00" content="2018-06-26">
-              2018-06-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/区块链/" itemprop="url" rel="index">
-                    <span itemprop="name">区块链</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/06/26/eos-code-read-1-appbase/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/06/26/eos-code-read-1-appbase/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><a href="https://github.com/eosio/appbase" target="_blank" rel="external">EOSIO/appbase</a>,如项目介绍所说——</p>
-<blockquote>
-<p>The AppBase library provides a basic framework for building applications from a set of plugins. AppBase manages the plugin life-cycle and ensures that all plugins are configured, initialized, started, and shutdown in the proper order.</p>
-</blockquote>
-<p>是一个从一系列插件构建应用的基本框架。 EOS的大多应用都是基于这个框架来构建的。</p>
-<p>AppBase是独立于EOS项目的一个独立项目，可以单独的编译，我们也可以利用这个框架构建自己的应用。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/06/26/eos-code-read-1-appbase/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1579,7 +1579,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1587,7 +1587,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1596,7 +1596,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
