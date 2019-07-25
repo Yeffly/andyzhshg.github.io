@@ -104,7 +104,7 @@
 <meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-inv.png">
 <meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-cmd.png">
 <meta property="og:image" content="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/task-run.png">
-<meta property="og:updated_time" content="2019-07-16T06:49:51.201Z">
+<meta property="og:updated_time" content="2019-07-25T11:20:11.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="群晖 Let&#39;s Encrypt 泛域名证书自动更新">
 <meta name="twitter:description" content="去年曾经写过一篇文章介绍如何在群晖的 NAS 通过 acme 协议更新 Let’s Encrypt 的 HTTPS 证书。最近突然发现acme协议版本更新，开始支持泛域名(wildcard)，也就是说，可以申请一个类似*.domain.com的单一证书，就可以适配abc.domain.com，xyz.domain.com这类的子域名，而不需要单独为每个子域名申请证书了。 Neilpang/acme">
@@ -390,7 +390,7 @@
 <h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h2><p>因为我介绍的方法是一键替换群晖的默认证书，所以，为了防止意外，最好保证你的证书列表里只有一条记录，即默认证书那一条。实际上因为支持了泛域名证书，基本上这一条记录就足够用了（当然，如果你要管理多个域名，可能本文的方法并不实用）。所以开始工作前你的证书列表大概应该是这个样子：</p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/cert-list.png" alt=""></p>
 <h2 id="2-下载一键更新脚本"><a href="#2-下载一键更新脚本" class="headerlink" title="2.  下载一键更新脚本"></a>2.  下载一键更新脚本</h2><p>这是一键脚本的项目地址：<a href="https://github.com/andyzhshg/syno-acme" target="_blank" rel="external">andyzhshg/syno-acme</a>。</p>
-<p>如果你对项目本身不感兴趣，可以直接下载打包好的工具：<a href="https://github.com/andyzhshg/syno-acme/archive/v0.1.6.zip" target="_blank" rel="external">syno-acme v0.1.6</a>。</p>
+<p>如果你对项目本身不感兴趣，可以直接下载打包好的工具：<a href="https://github.com/andyzhshg/syno-acme/archive/v0.1.7.zip" target="_blank" rel="external">syno-acme v0.1.7</a>。</p>
 <p>可以通过 File Station 将下载的工具上传到NAS的任意目录下，并解压。</p>
 <p>解压后大概是这个样子：</p>
 <p><img src="https://up4dev.oss-cn-qingdao.aliyuncs.com/nas-cert-up/unzip.png" alt="解压"></p>
