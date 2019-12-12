@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="区块链, blockchain, C++, iOS, server, p2p, BitCoin, EOS, NAS" />
+  <meta name="keywords" content="技术,C++,cmake," />
 
 
 
@@ -86,12 +86,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="UP4DEV">
-<meta property="og:url" content="http://www.up4dev.com/tags/etcd/index.html">
+<meta name="description" content="cmake_dependent_option 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 cmake 的文档是怎么说的：  Macro to provide an option dependent on other options. This macro presents an option to the user only if a set of other condit">
+<meta name="keywords" content="技术,C++,cmake">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cmake_dependent_option 详解">
+<meta property="og:url" content="http://www.up4dev.com/2019/12/12/cmake_dependent_option/index.html">
 <meta property="og:site_name" content="UP4DEV">
+<meta property="og:description" content="cmake_dependent_option 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 cmake 的文档是怎么说的：  Macro to provide an option dependent on other options. This macro presents an option to the user only if a set of other condit">
+<meta property="og:updated_time" content="2019-12-12T10:28:30.587Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UP4DEV">
+<meta name="twitter:title" content="cmake_dependent_option 详解">
+<meta name="twitter:description" content="cmake_dependent_option 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 cmake 的文档是怎么说的：  Macro to provide an option dependent on other options. This macro presents an option to the user only if a set of other condit">
 
 
 
@@ -112,10 +117,10 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/tags/etcd/"/>
+  <link rel="canonical" href="http://www.up4dev.com/2019/12/12/cmake_dependent_option/"/>
 
 
-  <title> 标签: etcd | UP4DEV </title>
+  <title> cmake_dependent_option 详解 | UP4DEV </title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({
@@ -161,7 +166,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -282,74 +287,181 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        etcd
-        <small>标签</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2019/05/29/etcd-mutex-lock/" itemprop="url">
-              
-                <span itemprop="name">一个用 etcd 作主备锁的细节问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-05-29T16:04:00+08:00"
-              content="2019-05-29" >
-          05-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2019/04/02/etcd-v2-v3/" itemprop="url">
-              
-                <span itemprop="name">etcd v2 v3 同时存在的问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-04-02T17:42:00+08:00"
-              content="2019-04-02" >
-          04-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </div>
 
   
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                cmake_dependent_option 详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-12-12T16:01:00+08:00" content="2019-12-12">
+              2019-12-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/12/12/cmake_dependent_option/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/12/cmake_dependent_option/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>cmake_dependent_option</code> 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 <a href="https://cmake.org/cmake/help/v3.5/module/CMakeDependentOption.html" target="_blank" rel="external">cmake 的文档是怎么说的：</a></p>
+<blockquote>
+<p>Macro to provide an option dependent on other options.</p>
+<p>This macro presents an option to the user only if a set of other conditions are true. When the option is not presented a default value is used, but any value set by the user is preserved for when the option is presented again. Example invocation:</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; CMAKE_DEPENDENT_OPTION(USE_FOO <span class="string">"Use Foo"</span> <span class="keyword">ON</span></div><div class="line">&gt;                        <span class="string">"USE_BAR;NOT USE_ZOT"</span> <span class="keyword">OFF</span>)</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>If USE_BAR is true and USE_ZOT is false, this provides an option called USE_FOO that defaults to ON. Otherwise, it sets USE_FOO to OFF. If the status of USE_BAR or USE_ZOT ever changes, any value for the USE_FOO option is saved so that when the option is re-enabled it retains its old value.</p>
+</blockquote>
+<p>这段英文绕来绕去，越看越头疼，我就不按原文翻译了，只说一下我的理解。我先把这个命令的具体形式再重复一下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cmake_dependent_option(OPT_VAR <span class="string">"OPT_VAR_DES"</span> DEF_VAL_1 <span class="string">"CONDITION_EXP"</span> DEF_VAR_2)</div></pre></td></tr></table></figure>
+<p>这个命令带有 5 个参数:</p>
+<ol>
+<li>OPT_VAR</li>
+<li>OPT_VAR_DES</li>
+<li>DEF_VAL_1</li>
+<li>CONDITION_EXP</li>
+<li>DEF_VAR_2</li>
+</ol>
+<p><code>cmake_dependent_option</code>的目的是要定义一个<code>option</code>，这个 <code>option</code> 就是 <code>OPT_VAR</code>，这个 <code>option</code> 的描述是 <code>OPT_VAR_DES</code>，这个 <code>option</code> 的默认值不是常量，而是 <code>DEF_VAL_1</code> 或者 <code>DEF_VAL_2</code>（<code>DEF_VAL_1</code>和<code>DEF_VAL_2</code>不同，但只能是<code>ON</code>或者<code>OFF</code>之一），具体是哪一个，取决于表达式 <code>CONDITION_EXP</code>，如果表达式 <code>CONDITION_EXP</code> 为 <code>true</code>，则默认值是 <code>DEF_VAL_1</code>，如果表达式 <code>CONDITION_EXP</code> 为 <code>false</code>，则默认值是 <code>DEF_VAL_2</code>。</p>
+<p>如果我们把这个命令自己来实现一把的话，可能要需要下面这一大段代码：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(CONDITION_EXP)</div><div class="line">	<span class="keyword">set</span>(OPT_VAR_DEF DEF_VAL_1)</div><div class="line"><span class="keyword">else</span>()</div><div class="line">	<span class="keyword">set</span>(OPT_VAR_DEF DEF_VAL_2)</div><div class="line"><span class="keyword">endif</span>()</div><div class="line"></div><div class="line"><span class="keyword">option</span>(OPT_VAR <span class="string">"OPT_VAR_DES"</span> OPT_VAR_DEF)</div></pre></td></tr></table></figure>
+<p>使用 <code>cmake_dependent_option</code>的时候需要导入<code>CMakeDependentOption</code>这个模块，也就是需要包含下面的语句：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">include</span>(CMakeDependentOption)</div></pre></td></tr></table></figure>
+<p>否则会出现类似 <code>Unknown CMake command &quot;cmake_dependent_option&quot;.</code>的报错。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag">#技术</a>
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+            <a href="/tags/cmake/" rel="tag">#cmake</a>
+          
+        </div>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/24/text-process-by-apple-script/" rel="next" title="用 AppleScript 一键自动处理选中的文本">
+                <i class="fa fa-chevron-left"></i> 用 AppleScript 一键自动处理选中的文本
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -357,6 +469,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -376,8 +499,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://up4dev.oss-cn-qingdao.aliyuncs.com/up.jpg"
@@ -447,6 +579,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -559,6 +702,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5"></script>
+
+
 
   
 
@@ -575,9 +722,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = 'tags/etcd/index.html';
-      var disqus_title = "";
-      var disqus_url = '';
+      var disqus_identifier = '2019/12/12/cmake_dependent_option/';
+      var disqus_title = "cmake_dependent_option 详解";
+      var disqus_url = 'http://www.up4dev.com/2019/12/12/cmake_dependent_option/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
@@ -588,6 +735,13 @@
       }
 
       run_disqus_script('count.js');
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
       
     </script>
   

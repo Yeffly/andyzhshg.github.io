@@ -306,6 +306,150 @@
             
               
                 
+                <a class="post-title-link" href="/2019/12/12/cmake_dependent_option/" itemprop="url">
+                  cmake_dependent_option 详解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-12-12T16:01:00+08:00" content="2019-12-12">
+              2019-12-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/12/12/cmake_dependent_option/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/12/cmake_dependent_option/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>cmake_dependent_option</code> 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 <a href="https://cmake.org/cmake/help/v3.5/module/CMakeDependentOption.html" target="_blank" rel="external">cmake 的文档是怎么说的：</a></p>
+<blockquote>
+<p>Macro to provide an option dependent on other options.</p>
+<p>This macro presents an option to the user only if a set of other conditions are true. When the option is not presented a default value is used, but any value set by the user is preserved for when the option is presented again. Example invocation:</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; CMAKE_DEPENDENT_OPTION(USE_FOO <span class="string">"Use Foo"</span> <span class="keyword">ON</span></div><div class="line">&gt;                        <span class="string">"USE_BAR;NOT USE_ZOT"</span> <span class="keyword">OFF</span>)</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>If USE_BAR is true and USE_ZOT is false, this provides an option called USE_FOO that defaults to ON. Otherwise, it sets USE_FOO to OFF. If the status of USE_BAR or USE_ZOT ever changes, any value for the USE_FOO option is saved so that when the option is re-enabled it retains its old value.</p>
+</blockquote>
+<p>这段英文绕来绕去，越看越头疼，我就不按原文翻译了，只说一下我的理解。我先把这个命令的具体形式再重复一下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cmake_dependent_option(OPT_VAR <span class="string">"OPT_VAR_DES"</span> DEF_VAL_1 <span class="string">"CONDITION_EXP"</span> DEF_VAR_2)</div></pre></td></tr></table></figure>
+<p>这个命令带有 5 个参数:</p>
+<ol>
+<li>OPT_VAR</li>
+<li>OPT_VAR_DES</li>
+<li>DEF_VAL_1</li>
+<li>CONDITION_EXP</li>
+<li>DEF_VAR_2</li>
+</ol>
+<p><code>cmake_dependent_option</code>的目的是要定义一个<code>option</code>，这个 <code>option</code> 就是 <code>OPT_VAR</code>，这个 <code>option</code> 的描述是 <code>OPT_VAR_DES</code>，这个 <code>option</code> 的默认值不是常量，而是 <code>DEF_VAL_1</code> 或者 <code>DEF_VAL_2</code>（<code>DEF_VAL_1</code>和<code>DEF_VAL_2</code>不同，但只能是<code>ON</code>或者<code>OFF</code>之一），具体是哪一个，取决于表达式 <code>CONDITION_EXP</code>，如果表达式 <code>CONDITION_EXP</code> 为 <code>true</code>，则默认值是 <code>DEF_VAL_1</code>，如果表达式 <code>CONDITION_EXP</code> 为 <code>false</code>，则默认值是 <code>DEF_VAL_2</code>。</p>
+<p>如果我们把这个命令自己来实现一把的话，可能要需要下面这一大段代码：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(CONDITION_EXP)</div><div class="line">	<span class="keyword">set</span>(OPT_VAR_DEF DEF_VAL_1)</div><div class="line"><span class="keyword">else</span>()</div><div class="line">	<span class="keyword">set</span>(OPT_VAR_DEF DEF_VAL_2)</div><div class="line"><span class="keyword">endif</span>()</div><div class="line"></div><div class="line"><span class="keyword">option</span>(OPT_VAR <span class="string">"OPT_VAR_DES"</span> OPT_VAR_DEF)</div></pre></td></tr></table></figure>
+<p>使用 <code>cmake_dependent_option</code>的时候需要导入<code>CMakeDependentOption</code>这个模块，也就是需要包含下面的语句：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">include</span>(CMakeDependentOption)</div></pre></td></tr></table></figure>
+<p>否则会出现类似 <code>Unknown CMake command &quot;cmake_dependent_option&quot;.</code>的报错。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/07/24/text-process-by-apple-script/" itemprop="url">
                   用 AppleScript 一键自动处理选中的文本
                 </a>
@@ -1410,127 +1554,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/07/27/spdlog-tutorial/" itemprop="url">
-                  spdlog 简介
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-07-27T18:09:00+08:00" content="2018-07-27">
-              2018-07-27
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C++</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2018/07/27/spdlog-tutorial/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/27/spdlog-tutorial/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>spdlog是一个速度快，只有头文件(header only)的C++日志库。安装和使用非常简单，而功能也比较强大，因为其简单易用轻量，可以用作我们日常开发的日志库。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/07/27/spdlog-tutorial/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1576,7 +1599,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-count">27</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1593,7 +1616,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
