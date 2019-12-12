@@ -93,7 +93,7 @@
 <meta property="og:url" content="http://www.up4dev.com/2019/12/12/cmake_dependent_option/index.html">
 <meta property="og:site_name" content="UP4DEV">
 <meta property="og:description" content="cmake_dependent_option 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 cmake 的文档是怎么说的：  Macro to provide an option dependent on other options. This macro presents an option to the user only if a set of other condit">
-<meta property="og:updated_time" content="2019-12-12T10:28:30.587Z">
+<meta property="og:updated_time" content="2019-12-12T10:31:15.594Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cmake_dependent_option 详解">
 <meta name="twitter:description" content="cmake_dependent_option 可以说是一个理解起来十分头疼的一条 cmake 命令了。我们先看看 cmake 的文档是怎么说的：  Macro to provide an option dependent on other options. This macro presents an option to the user only if a set of other condit">
@@ -320,7 +320,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-12-12T16:01:00+08:00" content="2019-12-12">
+            <time itemprop="dateCreated" datetime="2019-12-12T08:01:00+00:00" content="2019-12-12">
               2019-12-12
             </time>
           </span>
@@ -384,11 +384,9 @@
 <p>Macro to provide an option dependent on other options.</p>
 <p>This macro presents an option to the user only if a set of other conditions are true. When the option is not presented a default value is used, but any value set by the user is preserved for when the option is presented again. Example invocation:</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt; CMAKE_DEPENDENT_OPTION(USE_FOO <span class="string">"Use Foo"</span> <span class="keyword">ON</span></div><div class="line">&gt;                        <span class="string">"USE_BAR;NOT USE_ZOT"</span> <span class="keyword">OFF</span>)</div><div class="line">&gt;</div></pre></td></tr></table></figure>
-</blockquote>
-<p>&gt;</p>
-<blockquote>
 <p>If USE_BAR is true and USE_ZOT is false, this provides an option called USE_FOO that defaults to ON. Otherwise, it sets USE_FOO to OFF. If the status of USE_BAR or USE_ZOT ever changes, any value for the USE_FOO option is saved so that when the option is re-enabled it retains its old value.</p>
 </blockquote>
+<a id="more"></a>
 <p>这段英文绕来绕去，越看越头疼，我就不按原文翻译了，只说一下我的理解。我先把这个命令的具体形式再重复一下：</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cmake_dependent_option(OPT_VAR <span class="string">"OPT_VAR_DES"</span> DEF_VAL_1 <span class="string">"CONDITION_EXP"</span> DEF_VAR_2)</div></pre></td></tr></table></figure>
 <p>这个命令带有 5 个参数:</p>
