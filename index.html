@@ -1247,8 +1247,8 @@
       
         
           
-            <p>最近使用 <code>etcd</code> 时候遇到了一个问题，发现用 <code>go</code> 代码调用 <code>clientv3</code> 写进去的 <code>key</code> 和用 <code>etcdctl</code> 的 <code>key</code> 是不一样的，而且两边可以同时读写相同的 <code>key</code>， 但是知确实不相同的。</p>
-<p>因为这个问题查了将近两个小时，最后发现，原来 <code>etcd</code> 默认情况下是 <code>v2</code> 和 <code>v3</code> 的客户端 <code>API</code> 共存的，而两个版本的 <code>API</code> 产生和查询的数据时隔离的。</p>
+            <p>最近使用 <code>etcd</code> 时候遇到了一个问题，发现用 <code>go</code> 代码调用 <code>clientv3</code> 写进去的 <code>key</code> 和用 <code>etcdctl</code> 的 <code>key</code> 是不一样的，而且两边可以同时读写相同的 <code>key</code>， 但是值却是不相同的。</p>
+<p>因为这个问题查了将近两个小时，最后发现，原来 <code>etcd</code> 默认情况下是 <code>v2</code> 和 <code>v3</code> 的客户端 <code>API</code> 共存的，而两个版本的 <code>API</code> 产生和查询的数据是隔离的。</p>
 <p>用 <code>etcd</code> 的过程中看了不少的文章，结果恰恰我看的文章里都没有提到这一点，结果当了冤大头，浪费了这么多时间。</p>
 <p>其实现在应该大部分人都是用 <code>v3</code> 版本的 <code>API</code>，<code>etcdctl</code> 默认却是 <code>v2</code>的 <code>API</code>。不知道是出于什么考虑没有把 <code>v3</code> 版本 <code>API</code> 作为 <code>etcdctl</code> 的默认 <code>API</code> 版本。</p>
 <p>至于我会问到这个问题，也是因为我在开发的过程中想要用 <code>etcdctl</code> 来验证我的代码写进去的数据是否正确，如果我没有用 <code>etcdctl</code> 来读 <code>go</code> 客户端写进去的数据的话，也就不会有这个问题了。如果想要让 <code>etcdctl</code> 默认用 <code>v3</code> 版的 <code>API</code>，可用在使用 <code>etcdctl</code> 之前，设置版本环境变量：</p>
