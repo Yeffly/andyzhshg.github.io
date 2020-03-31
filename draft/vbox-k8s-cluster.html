@@ -70,7 +70,7 @@
 <link href="/css/main.css?v=5" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="技术,iOS," />
+  <meta name="keywords" content=",,,,," />
 
 
 
@@ -86,30 +86,17 @@
 
 
 
-<meta name="description" content="APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。 遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。 其实，Xcode的Target功能能够很好地解决这个问题。">
-<meta name="keywords" content="技术,iOS">
-<meta property="og:type" content="article">
-<meta property="og:title" content="巧用Xcode的Target管理开发和生产的APP版本">
-<meta property="og:url" content="http://www.up4dev.com/2015/09/07/use-xcode-targets/index.html">
+<meta name="description" content="网络设置 12345678910111213141516171819# /etc/netplan/*.yaml# This file is generated from information provided by# the datasource.  Changes to it will not persist across an instance.# To disable cloud-init">
+<meta name="keywords" content="kubernetes,docker,虚拟化,virtual box,分布式">
+<meta property="og:type" content="website">
+<meta property="og:title" content="用 virtual box 运行一个多节点的 k8s 集群">
+<meta property="og:url" content="http://www.up4dev.com/draft/vbox-k8s-cluster.html">
 <meta property="og:site_name" content="UP4DEV">
-<meta property="og:description" content="APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。 遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。 其实，Xcode的Target功能能够很好地解决这个问题。">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate0.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate1.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename0.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename1.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename2.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/xib.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/macro.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/home.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run0.png">
-<meta property="og:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run1.png">
-<meta property="og:updated_time" content="2018-05-08T18:16:01.010Z">
+<meta property="og:description" content="网络设置 12345678910111213141516171819# /etc/netplan/*.yaml# This file is generated from information provided by# the datasource.  Changes to it will not persist across an instance.# To disable cloud-init">
+<meta property="og:updated_time" content="2020-03-31T03:20:53.224Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="巧用Xcode的Target管理开发和生产的APP版本">
-<meta name="twitter:description" content="APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。 遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。 其实，Xcode的Target功能能够很好地解决这个问题。">
-<meta name="twitter:image" content="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate0.png">
+<meta name="twitter:title" content="用 virtual box 运行一个多节点的 k8s 集群">
+<meta name="twitter:description" content="网络设置 12345678910111213141516171819# /etc/netplan/*.yaml# This file is generated from information provided by# the datasource.  Changes to it will not persist across an instance.# To disable cloud-init">
 
 
 
@@ -130,10 +117,16 @@
 
 
 
-  <link rel="canonical" href="http://www.up4dev.com/2015/09/07/use-xcode-targets/"/>
+  <link rel="canonical" href="http://www.up4dev.com/draft/vbox-k8s-cluster.html"/>
 
 
-  <title> 巧用Xcode的Target管理开发和生产的APP版本 | UP4DEV </title>
+  <title>
+  
+
+  
+    用 virtual box 运行一个多节点的 k8s 集群 | UP4DEV
+  
+</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({
@@ -179,7 +172,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -302,184 +295,20 @@
 
   <div id="posts" class="posts-expand">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+    
+      <p>网络设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /etc/netplan/*.yaml</span></div><div class="line"></div><div class="line"><span class="comment"># This file is generated from information provided by</span></div><div class="line"><span class="comment"># the datasource.  Changes to it will not persist across an instance.</span></div><div class="line"><span class="comment"># To disable cloud-init's network configuration capabilities, write a file</span></div><div class="line"><span class="comment"># /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:</span></div><div class="line"><span class="comment"># network: &#123;config: disabled&#125;</span></div><div class="line">network:</div><div class="line">    ethernets:</div><div class="line">        enp0s3:</div><div class="line">            dhcp4: no</div><div class="line">            dhcp6: no</div><div class="line">            addresses: [10.0.2.101/24, ]</div><div class="line">            gateway4: 10.0.2.1</div><div class="line">            nameservers:</div><div class="line">                    addresses: [8.8.8.8, 8.8.4.4]</div><div class="line">    version: 2</div><div class="line">    </div><div class="line">netplan apply</div></pre></td></tr></table></figure>
+<p>启动脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">VBoxManage startvm ubuntu00 --type headless</div><div class="line">VBoxManage startvm ubuntu01 --type headless</div><div class="line">VBoxManage startvm ubuntu02 --type headless</div><div class="line">VBoxManage startvm ubuntu03 --type headless</div></pre></td></tr></table></figure>
+<p>关闭脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">VBoxManage controlvm ubuntu00 poweroff</div><div class="line">VBoxManage controlvm ubuntu01 poweroff</div><div class="line">VBoxManage controlvm ubuntu02 poweroff</div><div class="line">VBoxManage controlvm ubuntu03 poweroff</div></pre></td></tr></table></figure>
+<p>设置hostname</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hostnamectl <span class="built_in">set</span>-hostname ubuntu00</div><div class="line"></div><div class="line">vim /etc/cloud/cloud.cfg</div><div class="line">preserve_hostname: <span class="literal">true</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">apt-get update &amp;&amp; apt-get install -y apt-transport-https curl</div><div class="line">curl <span class="_">-s</span> https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -</div><div class="line">cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list</div><div class="line">deb https://apt.kubernetes.io/ kubernetes-xenial main</div><div class="line">EOF</div><div class="line">apt-get update</div><div class="line">apt-get install -y kubelet kubeadm kubectl</div><div class="line">apt-mark hold kubelet kubeadm kubectl</div><div class="line"></div><div class="line">swapoff <span class="_">-a</span></div><div class="line">vi /etc/fstab</div><div class="line"></div><div class="line">kubeadm init --pod-network-cidr=172.11.0.0/16</div><div class="line"></div><div class="line">kubeadm join 10.0.2.100:6443 --token dbst4w.beuy9i6hjiozxkx7 \</div><div class="line">    --discovery-token-ca-cert-hash sha256:fd1bd6a64250cc5743c8140450723c57fb725bb5529be9c7f0c038eca9e6390d</div></pre></td></tr></table></figure>
+<p>翻墙设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">apt-get install tsocks</div><div class="line">vi /etc/tsocks.conf</div><div class="line"></div><div class="line"><span class="comment"># This is the configuration for libtsocks (transparent socks)</span></div><div class="line"><span class="comment"># Lines beginning with # and blank lines are ignored</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># The basic idea is to specify:</span></div><div class="line"><span class="comment">#	- Local subnets - Networks that can be accessed directly without</span></div><div class="line"><span class="comment">#			  assistance from a socks server</span></div><div class="line"><span class="comment">#	- Paths - Paths are basically lists of networks and a socks server</span></div><div class="line"><span class="comment">#		  which can be used to reach these networks</span></div><div class="line"><span class="comment">#	- Default server - A socks server which should be used to access</span></div><div class="line"><span class="comment">#			   networks for which no path is available</span></div><div class="line"><span class="comment"># Much more documentation than provided in these comments can be found in</span></div><div class="line"><span class="comment"># the man pages, tsocks(8) and tsocks.conf(8)</span></div><div class="line"></div><div class="line"><span class="comment"># Local networks</span></div><div class="line"><span class="comment"># For this example this machine can directly access 192.168.0.0/255.255.255.0</span></div><div class="line"><span class="comment"># (192.168.0.*) and 10.0.0.0/255.0.0.0 (10.*)</span></div><div class="line"></div><div class="line"><span class="built_in">local</span> = 192.168.2.0/255.255.255.0</div><div class="line"><span class="built_in">local</span> = 10.0.0.0/255.0.0.0</div><div class="line"></div><div class="line"><span class="comment"># Paths</span></div><div class="line"><span class="comment"># For this example this machine needs to access 150.0.0.0/255.255.0.0 as</span></div><div class="line"><span class="comment"># well as port 80 on the network 150.1.0.0/255.255.0.0 through</span></div><div class="line"><span class="comment"># the socks 5 server at 10.1.7.25 (if this machines hostname was</span></div><div class="line"><span class="comment"># "socks.hello.com" we could also specify that, unless --disable-hostnames</span></div><div class="line"><span class="comment"># was specified to ./configure).</span></div><div class="line"></div><div class="line">path &#123;</div><div class="line">	reaches = 150.0.0.0/255.255.0.0</div><div class="line">	reaches = 150.1.0.0:80/255.255.0.0</div><div class="line">	server = 10.1.7.25</div><div class="line">	server_type = 5</div><div class="line">	default_user = delius</div><div class="line">	default_pass = hello</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># Default server</span></div><div class="line"><span class="comment"># For connections that aren't to the local subnets or to 150.0.0.0/255.255.0.0</span></div><div class="line"><span class="comment"># the server at 192.168.0.1 should be used (again, hostnames could be used</span></div><div class="line"><span class="comment"># too, see note above)</span></div><div class="line"></div><div class="line">server = 192.168.2.7</div><div class="line"><span class="comment"># Server type defaults to 4 so we need to specify it as 5 for this one</span></div><div class="line">server_type = 5</div><div class="line"><span class="comment"># The port defaults to 1080 but I've stated it here for clarity</span></div><div class="line">server_port = 1086</div><div class="line"></div><div class="line"></div><div class="line">tsocks apt-get update</div><div class="line">tsocks aptitude upgrade</div><div class="line">tsocks xxxx</div></pre></td></tr></table></figure>
 
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                巧用Xcode的Target管理开发和生产的APP版本
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-07T19:06:01+08:00" content="2015-09-07">
-              2015-09-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动开发/" itemprop="url" rel="index">
-                    <span itemprop="name">移动开发</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/07/use-xcode-targets/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/09/07/use-xcode-targets/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-              &nbsp; | &nbsp;
-              <span class="page-pv"><i class="fa fa-file-o"></i>
-              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
-              </span>
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>APP开发过程中我们经常会碰到这样的情况：需要同时维护两个版本，一个是开发测试版本，一个是线上运行版本。两者需要有不同的Bundle ID，有时甚至要连接不同的服务器。</p>
-<p>遇到这种情况，我们的做法往往是平时开发用测试版本的Bundle ID，测试的服务地址；上线的时候人工修改成正式版本的Bundle ID，线上的服务地址。</p>
-<p>其实，Xcode的Target功能能够很好地解决这个问题。</p>
-<a id="more"></a>
-<p>我们新建一个项目来说明怎么做，项目的名字叫<code>MultiTargetPrj</code>。</p>
-<p>Xcode默认给我们创建了两个Target，一个是<code>MultiTargetPrj</code>，另一个是<code>MultiTargetPrjTests</code>。<code>MultiTargetPrjTests</code>是单元测试的Target，我们暂且忽略。</p>
-<p>我们用<code>MultiTargetPrj</code>作为正式版，在此基础上我们新建一个Target来做开发版应用。如下图，在已有的<code>MultiTargetPrj</code> Target上点击右键，在菜单中选择<code>Duplicate</code>。</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate0.png" alt="复制targer0"></p>
-<p>这样Xcode就为我们创建了一个名为<code>MultiTargetPrj copy</code>的Target，如下图</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/duplicate1.png" alt="复制targer1"></p>
-<p>后边带个<code>copy</code>尾巴的名字太不优雅了，让我们重命名一下，要重命名的地方不少，我们还是直接看图吧：</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename0.png" alt="重命名0"></p>
-<p>然后重命名Schemes：</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename1.png" alt="重命名1"></p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/rename2.png" alt="重命名2"></p>
-<p>最后然我们编辑一下info.plist，让应用在屏幕上显示的名字各不相同，正式版叫MT，开发版叫MT Dev，如下图所示：</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png" alt="显示名0"></p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/display0.png" alt="显示名1"></p>
-<p>我们在界面上放置一个label，预期在运行正式版的应用时，显示<code>正式版</code>，测试版的应用时，显示<code>开发版</code>。</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/xib.png" alt="xib"></p>
-<p>为了让程序可以区分正式版和测试版，我们给开发版的target中设置一个预定义宏<code>MULTITARGET_DEV</code>:</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/macro.png" alt="设置预定义宏"></p>
-<p>然后我们用一段代码来区分版本，设置不同的版本的文字：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></div><div class="line"><span class="meta">#ifndef MULTITARGET_DEV</span></div><div class="line">    <span class="keyword">self</span>.label.text = <span class="string">@"正式版"</span>;</div><div class="line"><span class="meta">#else</span></div><div class="line">    <span class="keyword">self</span>.label.text = <span class="string">@"开发版"</span>;</div><div class="line"><span class="meta">#endif</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>分别运行一次两个Target，我们看到的主屏是这样的：</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/home.png" alt="主屏"></p>
-<p>两个Target的运行结果是这个样子的：</p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run0.png" alt="正式版截图"></p>
-<p><img src="http://up4dev.oss-cn-qingdao.aliyuncs.com/multitarget/run1.png" alt="测试版截图"></p>
-<p>我把这个测试程序的代码放到了GitHub: <a href="https://github.com/andyzhshg/MultiTarget" target="_blank" rel="external">andyzhshg/MultiTarget</a></p>
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/技术/" rel="tag">#技术</a>
-          
-            <a href="/tags/iOS/" rel="tag">#iOS</a>
-          
-        </div>
-      
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/09/07/new-start/" rel="next" title="新的开始">
-                <i class="fa fa-chevron-left"></i> 新的开始
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/08/git-commit-user-modify/" rel="prev" title="git修改提交记录的用户名和邮箱">
-                git修改提交记录的用户名和邮箱 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
@@ -518,17 +347,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://up4dev.oss-cn-qingdao.aliyuncs.com/up.jpg"
@@ -598,17 +418,6 @@
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -721,10 +530,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5"></script>
-
-
 
   
 
@@ -741,9 +546,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'up4dev';
-      var disqus_identifier = '2015/09/07/use-xcode-targets/';
-      var disqus_title = "巧用Xcode的Target管理开发和生产的APP版本";
-      var disqus_url = 'http://www.up4dev.com/2015/09/07/use-xcode-targets/';
+      var disqus_identifier = 'draft/vbox-k8s-cluster.html';
+      var disqus_title = "用 virtual box 运行一个多节点的 k8s 集群";
+      var disqus_url = 'http://www.up4dev.com/draft/vbox-k8s-cluster.html';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
